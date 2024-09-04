@@ -1,5 +1,4 @@
 
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -48,6 +47,12 @@ String _hashPassword(String password) {
   return digest.toString();
 }
 
+bool _isValidOtpUri(String uri) {
+  // Basic validation for OTP URI format
+  RegExp otpUriRegex = RegExp(r'^otpauth:\/\/(totp|hotp)\/(.+)\?secret=([A-Z2-7]+)(&.+)?$');
+  return otpUriRegex.hasMatch(uri);
+}
+
 class MyApp extends StatelessWidget {
 
   @override
@@ -56,7 +61,7 @@ class MyApp extends StatelessWidget {
     if (needToLogin){
       home = AuthPage();
     }else{
-      home = const MainPage(userData: null);
+      home = MainPage();
     }
     return MaterialApp(
       title: 'Supabase Flutter App',
@@ -94,7 +99,7 @@ class _AuthPageState extends State<AuthPage> {
       try {
         if (_isLogin) {
           var user_name = _usernameController.text;
-          var password_hash = (_passwordController.text);
+          var password_hash = _hashPassword(_passwordController.text);
           final response = await Supabase.instance.client
               .from('users')
               .select()
@@ -103,16 +108,19 @@ class _AuthPageState extends State<AuthPage> {
 
           if (response != null) {
             if (response['password_hash'] == password_hash) {
-              var userData = response['data'];
+              var userData = response['userdata'];
               if(userData!=null){
-                userData=jsonDecode(userData);
+                otpUris=List.from(userData);
               }else{
-                userData=List.empty();
+                otpUris=[];
               }
               asyncPrefs.setString("loginUsername", user_name);
               asyncPrefs.setString("loginPasswordHash", password_hash);
+              asyncPrefs.setStringList("otpUris", otpUris);
+              loginUsername = user_name;
+              loginPasswordHash = password_hash;
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => MainPage(userData: userData,)),
+                MaterialPageRoute(builder: (_) => MainPage()),
               );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -278,37 +286,26 @@ Future<void> logout(BuildContext context) async {
 }
 
 class MainPage extends StatefulWidget {
-  final dynamic userData;
-  const MainPage({super.key, required this.userData});
 
   
   @override
-  _MainPageState createState() => _MainPageState(userData: userData);
+  _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
 
 
-  final dynamic userData;
+  // final dynamic userData;
 
   int _selectedIndex = 0;
 
   late List<Widget> _widgetOptions;
   
-  _MainPageState({required this.userData});
+  // _MainPageState({required this.userData});
 
   @override
   void initState() {
     super.initState();
-    try{
-      if (userData != null){
-        otpUris = List.from(userData);
-      }
-    }catch(e){
-      if (kDebugMode) {
-        print("Error in getting OTP URIs");
-      }
-    }
     _widgetOptions = <Widget>[
       ListViewPage(),
       SettingsPage(),
@@ -851,12 +848,6 @@ String? _processQRCodeImage(img.Image image) {
     return null;
   }
 }
-
-bool _isValidOtpUri(String uri) {
-  // Basic validation for OTP URI format
-  RegExp otpUriRegex = RegExp(r'^otpauth:\/\/(totp|hotp)\/(.+)\?secret=([A-Z2-7]+)(&.+)?$');
-  return otpUriRegex.hasMatch(uri);
-}
 }
 
 
@@ -905,13 +896,12 @@ class SettingsPage extends StatelessWidget {
                 return;
               }
               
-              var user_name = Supabase.instance.client.auth.currentUser?.email;
               var old_password_hash = _hashPassword(_oldPasswordController.text);
               
               final response = await Supabase.instance.client
                 .from('users')
                 .select()
-                .eq('username', user_name)
+                .eq('username', loginUsername)
                 .maybeSingle();
               
               if (response != null && response['password_hash'] == old_password_hash) {
@@ -935,16 +925,16 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> _pullData(BuildContext context) async {
-    var user_name = Supabase.instance.client.auth.currentUser?.email;
     final response = await Supabase.instance.client
-      .from('users')
-      .select()
-      .eq('username', user_name)
-      .maybeSingle();
+              .from('users')
+              .select()
+              .eq('username', loginUsername)
+              .maybeSingle();
     
     if (response != null) {
       var userData = response['userdata'];
       // Use the userData as needed
+      otpUris = List.from(userData);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Data pulled successfully')),
       );
@@ -956,14 +946,19 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> _backupData(BuildContext context) async {
-    var user_name = Supabase.instance.client.auth.currentUser?.email;
-    var userData = {}; // Populate this with the user data to be backed up
-    
-    final response = await Supabase.instance.client
-      .from('users')
-      .update({'userdata': userData})
-      .eq('username', user_name);
-    
+    var userData = List.from(otpUris); // Populate this with the user data to be backed up
+    var response;
+    try {
+      response = await Supabase.instance.client
+          .from('users')
+          .update({ 'userdata': userData })
+          .eq('username', loginUsername);
+      print('Update successful: $response');
+    } catch (e) {
+      print('Error updating user data: $e');
+    }
+      
+  
     if (response != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Data backed up successfully')),
@@ -976,65 +971,55 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> _exportData(BuildContext context) async {
-    var user_name = Supabase.instance.client.auth.currentUser?.email;
-    final response = await Supabase.instance.client
-      .from('users')
-      .select()
-      .eq('username', user_name)
-      .maybeSingle();
-    
-    if (response != null) {
-      var userData = response['userdata'];
-      String jsonData = json.encode(userData);
-      
-      String? outputFile = await FilePicker.platform.saveFile(
-        dialogTitle: 'Please select an output file:',
-        fileName: 'user_data.json',
-      );
-
-      if (outputFile != null) {
-        // Write jsonData to the file
-        // Note: The actual file writing process depends on the platform (web, Windows, Android)
-        // You'll need to implement platform-specific file writing here
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data exported successfully')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to export data')),
-      );
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
+    );
   }
 
   Future<void> _loadData(BuildContext context) async {
+    
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-    if (result != null) {
-      String content;
-        if (kIsWeb) {
-          // For web
-          var fileBytes = result.files.first.bytes;
-          content = utf8.decode(fileBytes!);
-        } else {
-          // For mobile and desktop
-          File file = File(result.files.single.path!);
-          content = await file.readAsString();
-        }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
+    );
 
-      Map<String, dynamic> userData = json.decode(content);
-      
-      // Use the userData to update the application state
-      // You'll need to implement this part based on your app's structure
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Data loaded successfully')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No file selected')),
-      );
-    }
+    // if (result != null) {
+    //   String content;
+    //     if (kIsWeb) {
+    //       // For web
+    //       var fileBytes = result.files.first.bytes;
+    //       content = utf8.decode(fileBytes!);
+    //     } else {
+    //       // For mobile and desktop
+    //       File file = File(result.files.single.path!);
+    //       content = await file.readAsString();
+    //     }
+
+    //   // Use the userData to update the application state
+    //   try{
+        
+    //     List<String> userData = json.decode(content);
+    //     bool allStringsSatisfyCondition = userData.every((str) => _isValidOtpUri(str));
+    //     if (!allStringsSatisfyCondition) {
+    //       throw Exception("Invalid file content");
+    //     }
+
+    //     otpUris = List.from(userData);
+
+    //   }catch (e) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('File format not correct.')),
+    //   );
+    //   }  
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Data loaded successfully')),
+    //   );
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('No file selected')),
+    //   );
+    // }
   }
 
   Future<void> _deleteAccount(BuildContext context) async {
@@ -1060,6 +1045,10 @@ class SettingsPage extends StatelessWidget {
       try {
         // Implement account deletion here
         // For now, just return to the login page
+        final response = await Supabase.instance.client.from('users').delete().eq('username', loginUsername);
+        if(response == null){
+          throw "Error deleting account";
+        }
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => AuthPage()),
           (route) => false,
@@ -1092,13 +1081,13 @@ class SettingsPage extends StatelessWidget {
           onTap: () => _backupData(context),
         ),
         ListTile(
-          leading: const Icon(Icons.file_download),
-          title: const Text('Export Data'),
+          leading: const Icon(Icons.file_upload),
+          title: const Text('Export All OTPs'),
           onTap: () => _exportData(context),
         ),
         ListTile(
-          leading: const Icon(Icons.file_upload),
-          title: const Text('Load Data'),
+          leading: const Icon(Icons.file_download),
+          title: const Text('Load Batch OTPs'),
           onTap: () => _loadData(context),
         ),
         ListTile(
