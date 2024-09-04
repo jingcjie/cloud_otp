@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
       home = MainPage();
     }
     return MaterialApp(
-      title: 'Supabase Flutter App',
+      title: 'Cloud OTP',
       theme: ThemeData(
         primarySwatch: Colors.green,
         brightness: Brightness.light, // Light theme
@@ -953,17 +953,10 @@ class SettingsPage extends StatelessWidget {
           .from('users')
           .update({ 'userdata': userData })
           .eq('username', loginUsername);
-      print('Update successful: $response');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Data backed up successfully')),
+          );
     } catch (e) {
-      print('Error updating user data: $e');
-    }
-      
-  
-    if (response != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Data backed up successfully')),
-      );
-    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to backup data')),
       );
