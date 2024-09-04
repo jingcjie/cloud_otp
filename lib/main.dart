@@ -14,6 +14,7 @@ import 'package:otp/otp.dart';
 import 'dart:async';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 
 final supabase = Supabase.instance.client;
@@ -401,6 +402,59 @@ class OtpItem {
   }
 }
 
+class QRCodeDialog extends StatelessWidget {
+  final String uri;
+
+  const QRCodeDialog({Key? key, required this.uri}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.4,
+          maxHeight: MediaQuery.of(context).size.height * 0.8,
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                QrImageView(
+                  data: uri,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: uri));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('URI copied to clipboard')),
+                        );
+                      },
+                      child: const Text('Copy URI'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class ListViewPage extends StatefulWidget {
 
   @override
@@ -552,10 +606,18 @@ void _setDefaultValues() {
       const SnackBar(content: Text('OTP copied to clipboard')),
     );
   }
+  
 
-  void _exportOtp(int index) {
-
-  }
+void _exportOtp(BuildContext context, int index) {
+  var single_otp_uri = otpUris[index];
+  
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return QRCodeDialog(uri: single_otp_uri);
+    },
+  );
+}
 
   void _deleteOtp(int index) {
     setState(() {
@@ -622,7 +684,7 @@ void _setDefaultValues() {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.ios_share),
-                          onPressed: () => _exportOtp(index),
+                          onPressed: () => _exportOtp(context, index),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
