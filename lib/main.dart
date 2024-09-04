@@ -1135,16 +1135,16 @@ class SettingsPage extends StatelessWidget {
           title: const Text('Backup Data'),
           onTap: () => _backupData(context),
         ),
-        ListTile(
-          leading: const Icon(Icons.file_upload),
-          title: const Text('Export All OTPs'),
-          onTap: () => _exportData(context),
-        ),
-        ListTile(
-          leading: const Icon(Icons.file_download),
-          title: const Text('Load Batch OTPs'),
-          onTap: () => _loadData(context),
-        ),
+        // ListTile(
+        //   leading: const Icon(Icons.file_upload),
+        //   title: const Text('Export All OTPs'),
+        //   onTap: () => _exportData(context),
+        // ),
+        // ListTile(
+        //   leading: const Icon(Icons.file_download),
+        //   title: const Text('Load Batch OTPs'),
+        //   onTap: () => _loadData(context),
+        // ),
         ListTile(
           leading: const Icon(Icons.delete_forever, color: Colors.red),
           title: const Text('Delete Account', style: TextStyle(color: Colors.red)),
