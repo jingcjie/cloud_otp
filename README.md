@@ -2,7 +2,7 @@
 
 A versatile One-Time Password (OTP) authenticator application built with Dart, supporting multiple platforms including Windows, Linux, Web, Android, iOS, and macOS.
 
-[中文版 README](./readme_zh.md)
+[中文版 README](./readme-zh.md)
 ## 🤔 Why This Project?
 
 While Google Authenticator is a popular choice for OTP, it has some limitations:
