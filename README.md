@@ -97,8 +97,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📊 Project Status
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/otp-authenticator?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/otp-authenticator?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/otp-authenticator)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/otp-authenticator)
+![GitHub stars](https://img.shields.io/github/stars/jingcjie/cloud_otp?style=social)
+![GitHub forks](https://img.shields.io/github/forks/jingcjie/cloud_otp?style=social)
+![GitHub issues](https://img.shields.io/github/issues/jingcjie/cloud_otp)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/jingcjie/cloud_otp)
 
