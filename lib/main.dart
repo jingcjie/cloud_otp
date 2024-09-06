@@ -1,7 +1,6 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:zxing2/qrcode.dart';
@@ -15,6 +14,8 @@ import 'dart:async';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+
 
 
 final supabase = Supabase.instance.client;
@@ -55,6 +56,8 @@ bool _isValidOtpUri(String uri) {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +86,8 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthPage extends StatefulWidget {
+  const AuthPage({super.key});
+
   @override
   _AuthPageState createState() => _AuthPageState();
 }
@@ -99,27 +104,27 @@ class _AuthPageState extends State<AuthPage> {
     if (_formKey.currentState!.validate()) {
       try {
         if (_isLogin) {
-          var user_name = _usernameController.text;
-          var password_hash = _hashPassword(_passwordController.text);
+          var userName = _usernameController.text;
+          var passwordHash = _hashPassword(_passwordController.text);
           final response = await Supabase.instance.client
               .from('users')
               .select()
-              .eq('username', user_name)
+              .eq('username', userName)
               .maybeSingle();
 
           if (response != null) {
-            if (response['password_hash'] == password_hash) {
+            if (response['password_hash'] == passwordHash) {
               var userData = response['userdata'];
               if(userData!=null){
                 otpUris=List.from(userData);
               }else{
                 otpUris=[];
               }
-              asyncPrefs.setString("loginUsername", user_name);
-              asyncPrefs.setString("loginPasswordHash", password_hash);
+              asyncPrefs.setString("loginUsername", userName);
+              asyncPrefs.setString("loginPasswordHash", passwordHash);
               asyncPrefs.setStringList("otpUris", otpUris);
-              loginUsername = user_name;
-              loginPasswordHash = password_hash;
+              loginUsername = userName;
+              loginPasswordHash = passwordHash;
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => MainPage()),
               );
@@ -246,13 +251,13 @@ class _AuthPageState extends State<AuthPage> {
                           const SizedBox(height: 24),
                           ElevatedButton(
                             onPressed: _submitForm,
-                            child: Text(_isLogin ? 'Login' : 'Sign Up'),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
+                            child: Text(_isLogin ? 'Login' : 'Sign Up'),
                           ),
                           const SizedBox(height: 16),
                           TextButton(
@@ -287,6 +292,8 @@ Future<void> logout(BuildContext context) async {
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
 
   
   @override
@@ -405,7 +412,7 @@ class OtpItem {
 class QRCodeDialog extends StatelessWidget {
   final String uri;
 
-  const QRCodeDialog({Key? key, required this.uri}) : super(key: key);
+  const QRCodeDialog({super.key, required this.uri});
 
   @override
   Widget build(BuildContext context) {
@@ -456,6 +463,8 @@ class QRCodeDialog extends StatelessWidget {
 
 
 class ListViewPage extends StatefulWidget {
+  const ListViewPage({super.key});
+
 
   @override
   _ListViewPageState createState() => _ListViewPageState();
@@ -609,12 +618,12 @@ void _setDefaultValues() {
   
 
 void _exportOtp(BuildContext context, int index) {
-  var single_otp_uri = otpUris[index];
+  var singleOtpUri = otpUris[index];
   
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return QRCodeDialog(uri: single_otp_uri);
+      return QRCodeDialog(uri: singleOtpUri);
     },
   );
 }
@@ -645,7 +654,7 @@ void _exportOtp(BuildContext context, int index) {
 
         // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Deleted successfully')),
+          const SnackBar(content: Text('Deleted successfully')),
         );
       } catch (e) {
         print('Error deleting OTP: $e');
@@ -665,7 +674,7 @@ void _exportOtp(BuildContext context, int index) {
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: otpItems.isEmpty
-          ? Center(child: Text('No OTPs added yet. Tap the + button to add one.'))
+          ? const Center(child: Text('No OTPs added yet. Tap the + button to add one.'))
           : ListView.builder(
               itemCount: otpItems.length,
               itemBuilder: (context, index) {
@@ -742,12 +751,12 @@ void _exportOtp(BuildContext context, int index) {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         children: [
           SpeedDialChild(
-            child: Icon(Icons.input),
+            child: const Icon(Icons.input),
             label: 'Manual Input',
             onTap: _manualInput,
           ),
           SpeedDialChild(
-            child: Icon(Icons.qr_code_scanner),
+            child: const Icon(Icons.qr_code_scanner),
             label: 'QR Scanner',
             onTap: _qrScanner,
           ),
@@ -765,24 +774,24 @@ void _exportOtp(BuildContext context, int index) {
         String issuer = '';
 
         return AlertDialog(
-          title: Text('Manual Input'),
+          title: const Text('Manual Input'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Secret'),
+                decoration: const InputDecoration(labelText: 'Secret'),
                 onChanged: (value) {
                   secret = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Label'),
+                decoration: const InputDecoration(labelText: 'Label'),
                 onChanged: (value) {
                   label = value;
                 },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Issuer (optional)'),
+                decoration: const InputDecoration(labelText: 'Issuer (optional)'),
                 onChanged: (value) {
                   issuer = value;
                 },
@@ -794,14 +803,14 @@ void _exportOtp(BuildContext context, int index) {
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 final uri = Uri(
                   scheme: 'otpauth',
                   host: 'totp',
-                  path: '$label',
+                  path: label,
                   queryParameters: {
                     'secret': secret,
                     if (issuer.isNotEmpty) 'issuer': issuer,
@@ -809,7 +818,7 @@ void _exportOtp(BuildContext context, int index) {
                 );
                 Navigator.of(context).pop(uri.toString());
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -836,7 +845,7 @@ void _qrScanner() async {
       _addOtp(scannedData);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid OTP QR code')),
+        const SnackBar(content: Text('Invalid OTP QR code')),
       );
     }
   }
@@ -859,20 +868,21 @@ Future<String?> _webQRScanner() async {
   return null;
 }
 
+
 Future<String?> _mobileQRScanner() async {
-  // This function will handle both Android and iOS
-  final qrKey = GlobalKey(debugLabel: 'QR');
   return Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => Scaffold(
-        appBar: AppBar(title: Text('Scan QR Code')),
-        body: QRView(
-          key: qrKey,
-          onQRViewCreated: (QRViewController controller) {
-            controller.scannedDataStream.listen((scanData) {
-              controller.dispose();
-              Navigator.of(context).pop(scanData.code);
-            });
+        appBar: AppBar(title: const Text('Scan QR Code')),
+        body: MobileScanner(
+          onDetect: (capture) {
+            final List<Barcode> barcodes = capture.barcodes;
+            for (final barcode in barcodes) {
+              if (barcode.rawValue != null) {
+                Navigator.of(context).pop(barcode.rawValue);
+                return;
+              }
+            }
           },
         ),
       ),
@@ -919,6 +929,8 @@ class SettingsPage extends StatelessWidget {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
+  SettingsPage({super.key});
+
   Future<void> _changePassword(BuildContext context) async {
     showDialog(
       context: context,
@@ -958,7 +970,7 @@ class SettingsPage extends StatelessWidget {
                 return;
               }
               
-              var old_password_hash = _hashPassword(_oldPasswordController.text);
+              var oldPasswordHash = _hashPassword(_oldPasswordController.text);
               
               final response = await Supabase.instance.client
                 .from('users')
@@ -966,7 +978,7 @@ class SettingsPage extends StatelessWidget {
                 .eq('username', loginUsername)
                 .maybeSingle();
               
-              if (response != null && response['password_hash'] == old_password_hash) {
+              if (response != null && response['password_hash'] == oldPasswordHash) {
                 // Implement password change logic here
                 // For now, just show a success message
                 Navigator.of(context).pop();
@@ -1025,19 +1037,19 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
-  Future<void> _exportData(BuildContext context) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
-    );
-  }
-
-  Future<void> _loadData(BuildContext context) async {
-    
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
-    );
+  // Future<void> _exportData(BuildContext context) async {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
+  //   );
+  // }
+  //
+  // Future<void> _loadData(BuildContext context) async {
+  //
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles();
+  //
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
+  //   );
 
     // if (result != null) {
     //   String content;
@@ -1075,7 +1087,7 @@ class SettingsPage extends StatelessWidget {
     //     const SnackBar(content: Text('No file selected')),
     //   );
     // }
-  }
+  // }
 
   Future<void> _deleteAccount(BuildContext context) async {
     final confirmed = await showDialog<bool>(
