@@ -27,7 +27,7 @@ This project aims to solve these issues by providing a cross-platform solution t
 ### Quick Access Options
 
 - 🌐 **Web Version**: Visit [https://cloudotp.me/](https://cloudotp.me/) to use the OTP Authenticator directly in your browser.
-- 📥 **Pre-compiled Releases**: If you don't want to compile the application yourself, you can download pre-compiled releases from our [GitHub Releases page](https://github.com/yourusername/otp-authenticator/releases).
+- 📥 **Pre-compiled Releases**: If you don't want to compile the application yourself, you can download pre-compiled releases from [GitHub Releases page](https://github.com/yourusername/otp-authenticator/releases).
 
 ### Prerequisites (for compiling from source)
 
@@ -74,7 +74,7 @@ Our OTP Authenticator allows you to export any of your OTP setups as a QR code. 
 
 1. 🔄 **Easy Transfer**: Quickly move your OTP setups to another device or authenticator app.
 2. 💾 **Secure Backup**: Generate and save QR codes for all your OTPs as a foolproof backup method.
-3. 🔓 **No Lock-in**: You're never trapped in our ecosystem - your OTP setups are always portable.
+3. 🔓 **No Lock-in**: You're never trapped in this app - your OTP setups are always portable.
 4. 📸 **Quick Setup**: Easily set up new devices by scanning your saved QR codes.
 
 To use this feature, simply select the OTP you want to export and choose the "Export as QR" option. You can then save the QR code image securely or use it immediately to set up the OTP in another app.
