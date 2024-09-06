@@ -20,8 +20,8 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 final supabase = Supabase.instance.client;
 late List<String> otpUris;
-late String? loginUsername;
-late String? loginPassword;
+late String loginUsername;
+late String loginPassword;
 bool needToLogin=true;
 final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
@@ -43,7 +43,6 @@ Future<void> main() async {
     );
     if (response.user != null) {
       needToLogin = false;
-
     }
   }catch(e) {
     if (kDebugMode) {
@@ -341,16 +340,26 @@ class _AuthPageState extends State<AuthPage> {
             await supabase
                 .from('user_data')
                 .insert({ 'user_id': id,'user_data': [] });
+            otpUris= [];
+
           }else {
             if (t_response['user_data'] == null) {
               await supabase
                   .from('user_data')
                   .update({'userdata': []})
                   .eq('user_id', id);
+              otpUris= [];
             } else {
               otpUris = List.from(t_response['user_data']);
             }
           }
+          loginUsername = _emailController.text;
+          loginPassword = _passwordController.text;
+
+          asyncPrefs.setString("loginUsername", loginUsername);
+          asyncPrefs.setString("loginPasswordHash", loginPassword);
+          asyncPrefs.setStringList("otpUris", otpUris);
+
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => MainPage()),
           );
