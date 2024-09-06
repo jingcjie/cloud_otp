@@ -30,7 +30,7 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: 'https://bclaahfvyffqzoqwwegd.supabase.co',
-    anonKey: 'x.x.x',
+    anonKey: 'x.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbGFhaGZ2eWZmcXpvcXd3ZWdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ5MTcyMjcsImV4cCI6MjA0MDQ5MzIyN30.wAmbOCF70IcnqVylOUq9FqSzv3_pXcc7uEgVi7_qTQk',
   );
 
   otpUris = (await asyncPrefs.getStringList("otpUris"))??[];
@@ -169,7 +169,6 @@ class _AuthPageState extends State<AuthPage> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -222,7 +221,12 @@ class _AuthPageState extends State<AuthPage> {
                               ),
                             ),
                             validator: (value) =>
-                                value!.isEmpty ? 'Please enter your username' : null,
+                            value!.isEmpty ? 'Please enter your username' : null,
+                            onFieldSubmitted: (_) {
+                              if (_passwordController.text.isNotEmpty) {
+                                _submitForm();
+                              }
+                            },
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
@@ -246,7 +250,12 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                             obscureText: _isObscure,
                             validator: (value) =>
-                                value!.isEmpty ? 'Please enter your password' : null,
+                            value!.isEmpty ? 'Please enter your password' : null,
+                            onFieldSubmitted: (_) {
+                              if (_usernameController.text.isNotEmpty) {
+                                _submitForm();
+                              }
+                            },
                           ),
                           const SizedBox(height: 24),
                           ElevatedButton(
@@ -281,6 +290,117 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Container(
+//         decoration: BoxDecoration(
+//           gradient: LinearGradient(
+//             begin: Alignment.topLeft,
+//             end: Alignment.bottomRight,
+//             colors: [Colors.blue.shade300, Colors.purple.shade300],
+//           ),
+//         ),
+//         child: SafeArea(
+//           child: Center(
+//             child: SingleChildScrollView(
+//               child: Padding(
+//                 padding: const EdgeInsets.all(24.0),
+//                 child: Card(
+//                   elevation: 8,
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(16),
+//                   ),
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(24.0),
+//                     child: Form(
+//                       key: _formKey,
+//                       child: Column(
+//                         mainAxisSize: MainAxisSize.min,
+//                         children: [
+//                           Icon(
+//                             Icons.lock,
+//                             size: 80,
+//                             color: Theme.of(context).primaryColor,
+//                           ),
+//                           const SizedBox(height: 24),
+//                           Text(
+//                             _isLogin ? 'Welcome Back' : 'Create Account',
+//                             style: const TextStyle(
+//                               fontSize: 24,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
+//                           const SizedBox(height: 24),
+//                           TextFormField(
+//                             controller: _usernameController,
+//                             decoration: InputDecoration(
+//                               labelText: 'Username',
+//                               prefixIcon: const Icon(Icons.person),
+//                               border: OutlineInputBorder(
+//                                 borderRadius: BorderRadius.circular(12),
+//                               ),
+//                             ),
+//                             validator: (value) =>
+//                                 value!.isEmpty ? 'Please enter your username' : null,
+//                           ),
+//                           const SizedBox(height: 16),
+//                           TextFormField(
+//                             controller: _passwordController,
+//                             decoration: InputDecoration(
+//                               labelText: 'Password',
+//                               prefixIcon: const Icon(Icons.lock),
+//                               suffixIcon: IconButton(
+//                                 icon: Icon(
+//                                   _isObscure ? Icons.visibility : Icons.visibility_off,
+//                                 ),
+//                                 onPressed: () {
+//                                   setState(() {
+//                                     _isObscure = !_isObscure;
+//                                   });
+//                                 },
+//                               ),
+//                               border: OutlineInputBorder(
+//                                 borderRadius: BorderRadius.circular(12),
+//                               ),
+//                             ),
+//                             obscureText: _isObscure,
+//                             validator: (value) =>
+//                                 value!.isEmpty ? 'Please enter your password' : null,
+//                           ),
+//                           const SizedBox(height: 24),
+//                           ElevatedButton(
+//                             onPressed: _submitForm,
+//                             style: ElevatedButton.styleFrom(
+//                               minimumSize: const Size(double.infinity, 50),
+//                               shape: RoundedRectangleBorder(
+//                                 borderRadius: BorderRadius.circular(12),
+//                               ),
+//                             ),
+//                             child: Text(_isLogin ? 'Login' : 'Sign Up'),
+//                           ),
+//                           const SizedBox(height: 16),
+//                           TextButton(
+//                             onPressed: () => setState(() => _isLogin = !_isLogin),
+//                             child: Text(
+//                               _isLogin
+//                                   ? 'Need an account? Sign Up'
+//                                   : 'Already have an account? Login',
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 Future<void> logout(BuildContext context) async {
   await asyncPrefs.remove("loginUsername");
