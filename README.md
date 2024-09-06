@@ -2,7 +2,16 @@
 
 A versatile One-Time Password (OTP) authenticator application built with Dart, supporting multiple platforms including Windows, Linux, Web, Android, iOS, and macOS.
 
-[中文版 README](./README_zh.md)
+[中文版 README](./readme_zh.md)
+## 🤔 Why This Project?
+
+While Google Authenticator is a popular choice for OTP, it has some limitations:
+
+1. 📵 It only supports Android and iOS, making it inconvenient for desktop users.
+2. 🔒 It's device-based, which means you can't easily access your codes across multiple devices. (God knows every time I need an OTP but I don't know where my phone is!)
+3. 🔒 Limited backup and transfer options for your OTP setups. (Of course I don't want to bind to one software!)
+
+This project aims to solve these issues by providing a cross-platform solution that allows you to use OTP codes on your preferred device, whether it's your phone, tablet, or computer. Additionally, our QR code export feature ensures you're never locked into our app - you can easily transfer your OTPs to other authenticator apps or create backups.
 
 ## ✨ Features
 
@@ -12,16 +21,6 @@ A versatile One-Time Password (OTP) authenticator application built with Dart, s
 - 🛡️ Secure: Implements industry-standard OTP algorithms
 - 📱💻 QR Code Export: Generate QR codes for each OTP, enabling easy transfer to other authenticator apps
 - 💾 Backup and Restore: Save your OTP setups as QR codes for foolproof backups
-
-## 🤔 Why This Project?
-
-While Google Authenticator is a popular choice for OTP, it has some limitations:
-
-1. 📵 It only supports Android and iOS, making it inconvenient for desktop users.
-2. 🔒 It's device-based, which means you can't easily access your codes across multiple devices.
-3. 🔒 Limited backup and transfer options for your OTP setups.
-
-This project aims to solve these issues by providing a cross-platform solution that allows you to use OTP codes on your preferred device, whether it's your phone, tablet, or computer. Additionally, our QR code export feature ensures you're never locked into our app - you can easily transfer your OTPs to other authenticator apps or create backups.
 
 ## 🚀 Getting Started
 
@@ -93,6 +92,8 @@ This project is licensed under the [MIT License](LICENSE).
 - [Dart](https://dart.dev) 🎯
 - [Flutter](https://flutter.dev) 💙
 - [OTP RFC 6238](https://tools.ietf.org/html/rfc6238) 🔢
+
+## 🙏 A star please
 
 ## 📊 Project Status
 
