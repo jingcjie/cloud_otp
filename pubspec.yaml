@@ -48,13 +48,45 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: "^0.13.1"
+  msix: ^3.16.8
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "./icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_foreground: "./icon.png"
+  adaptive_icon_background: "#ffffff"
+  web:
+    generate: true
+    image_path: "./icon.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "./icon.png"
+    icon_size: 256 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "./icon.png"
+
+msix_config:
+  display_name: CloudOTP
+  publisher_display_name: JINGCJIE
+  identity_name: JINGCJIE.31594FB165A1C
+  msix_version: 1.0.0.0
+  logo_path: "./icon.png"
+  capabilities: internetClient
+  enable_at_startup: false
+  store: true
+  publisher: CN=79F5182C-F623-427B-BB35-112212334FEE
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
