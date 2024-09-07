@@ -9,6 +9,22 @@
 2. 这些验证器都不能导出我之前的密钥，就像靠怀孕留住老公的小三一样🤐。（至于安全，本来就是二次验证，密码被偷，密钥还被偷啊😂）。
 3. 当然，我还是想要自动同步功能，这样我手机电脑都可以随时访问😁。
 
+## 🥳 测试过的平台
+### 支持
+<div style="display: flex; align-items: center; gap: 20px;">
+  <img src="https://github.com/fluidicon.png" alt="GitHub" width="48" height="48">
+  <img src="https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-d.png" alt="NVIDIA" width="120" height="48">
+  <img src="https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg" alt="Cloudflare" width="96" height="48">
+  <img src="https://avatars.githubusercontent.com/u/17085531?s=200&v=4" alt="Nexus mod" width="48" height="48">
+  <img src="https://avatars.githubusercontent.com/u/22990620?s=200&v=4" alt="Parsec" width="48" height="48">
+  <img src="https://www.notion.so/front-static/logo-ios.png" alt="Notion" width="48" height="48">
+  <img src="https://avatars.githubusercontent.com/u/23211?s=200&v=4" alt="Heroku" width="48" height="48">
+</div>
+
+
+### 不支持的
+记得发起issue如果有某个特定平台可以使用otp软件，但该软件不支持的。❤️
+
 ## ✨ 功能特点（以下均为翻译🗣，可以不看了️）
 
 - 🖥️ 📱 跨平台支持：可在桌面、网页和移动设备上使用
