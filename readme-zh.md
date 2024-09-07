@@ -6,7 +6,7 @@
 ## 🤔 为什么开发这个项目？
 
 1. 每次我想输入验证码我都要去找我的手机，这些OTP验证器就不能好好考虑下桌面用户吗😒。
-2. 这些验证器都不能导出我之前的密钥，就像靠怀孕留住老公的小三一样🤐。（至于安全，本来就是二次验证，密码被偷，密钥还被偷啊😂）。
+2. 这些验证器都不能导出我之前的密钥，就像靠怀孕留住老公的小三一样🤐。
 3. 当然，我还是想要自动同步功能，这样我手机电脑都可以随时访问😁。
 
 ## 🥳 测试过的平台
@@ -51,11 +51,11 @@
 
 1. 克隆仓库：
    ```
-   git clone https://github.com/yourusername/otp-authenticator.git
+   git clone https://github.com/jingcjie/cloud_otp.git
    ```
 2. 进入项目目录：
    ```
-   cd otp-authenticator
+   cd cloud_otp
    ```
 3. 安装依赖：
    ```
