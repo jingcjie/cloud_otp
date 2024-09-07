@@ -56,11 +56,11 @@ Feel free to post issue for platforms with standard OTP but not supported for th
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/otp-authenticator.git
+   git clone https://github.com/jingcjie/cloud_otp.git
    ```
 2. Navigate to the project directory:
    ```
-   cd otp-authenticator
+   cd cloud_otp
    ```
 3. Install dependencies:
    ```
