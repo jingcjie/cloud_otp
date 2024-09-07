@@ -1,13 +1,9 @@
-
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:zxing2/qrcode.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:otp/otp.dart';
 import 'dart:async';
@@ -35,11 +31,11 @@ Future<void> main() async {
 
   otpUris = (await asyncPrefs.getStringList("otpUris"))??[];
   try{
-    String saved_loginUsername = (await asyncPrefs.getString("loginUsername"))!;
-    String saved_loginPassword = (await asyncPrefs.getString("loginPassword"))!;
+    String savedLoginusername = (await asyncPrefs.getString("loginUsername"))!;
+    String savedLoginPassword = (await asyncPrefs.getString("loginPassword"))!;
     final response = await supabase.auth.signInWithPassword(
-      email: saved_loginUsername,
-      password: saved_loginPassword,
+      email: savedLoginusername,
+      password: savedLoginPassword,
     );
     if (response.user != null) {
       needToLogin = false;
@@ -50,13 +46,7 @@ Future<void> main() async {
     }
   }
 
-  runApp(MyApp());
-}
-
-String _hashPassword(String password) {
-  var bytes = utf8.encode(password);
-  var digest = sha256.convert(bytes);
-  return digest.toString();
+  runApp(const MyApp());
 }
 
 bool _isValidOtpUri(String uri) {
@@ -73,9 +63,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     StatefulWidget home;
     if (needToLogin){
-      home = AuthPage();
+      home = const AuthPage();
     }else{
-      home = MainPage();
+      home = const MainPage();
     }
     return MaterialApp(
       title: 'Cloud OTP',
@@ -102,212 +92,6 @@ class AuthPage extends StatefulWidget {
   _AuthPageState createState() => _AuthPageState();
 }
 
-//
-// class _AuthPageState extends State<AuthPage> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _usernameController = TextEditingController();
-//   final _passwordController = TextEditingController();
-//   bool _isLogin = true;
-//   bool _isObscure = true;
-//
-//   Future<void> _submitForm() async {
-//     if (_formKey.currentState!.validate()) {
-//       try {
-//         if (_isLogin) {
-//           var userName = _usernameController.text;
-//           var passwordHash = _hashPassword(_passwordController.text);
-//           final response = await Supabase.instance.client
-//               .from('users')
-//               .select()
-//               .eq('username', userName)
-//               .maybeSingle();
-//
-//           if (response != null) {
-//             if (response['password_hash'] == passwordHash) {
-//               var userData = response['userdata'];
-//               if(userData!=null){
-//                 otpUris=List.from(userData);
-//               }else{
-//                 otpUris=[];
-//               }
-//               asyncPrefs.setString("loginUsername", userName);
-//               asyncPrefs.setString("loginPasswordHash", passwordHash);
-//               asyncPrefs.setStringList("otpUris", otpUris);
-//               loginUsername = userName;
-//               loginPassword = passwordHash;
-//               Navigator.of(context).pushReplacement(
-//                 MaterialPageRoute(builder: (_) => MainPage()),
-//               );
-//             } else {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 const SnackBar(content: Text('Invalid username or password')),
-//               );
-//             }
-//           } else {
-//             ScaffoldMessenger.of(context).showSnackBar(
-//               const SnackBar(content: Text('User not found')),
-//             );
-//           }
-//         } else {
-//           // Check if username already exists
-//           final existingUser = await Supabase.instance.client
-//               .from('users')
-//               .select()
-//               .eq('username', _usernameController.text)
-//               .maybeSingle();
-//
-//           if (existingUser != null) {
-//             ScaffoldMessenger.of(context).showSnackBar(
-//               const SnackBar(content: Text('Username already exists')),
-//             );
-//           } else {
-//             // Create new user
-//             await Supabase.instance.client.from('users').insert({
-//               'username': _usernameController.text,
-//               'password_hash': _hashPassword(_passwordController.text),
-//             });
-//             ScaffoldMessenger.of(context).showSnackBar(
-//               const SnackBar(content: Text('Sign up successful. Please log in.')),
-//             );
-//             setState(() => _isLogin = true);
-//           }
-//         }
-//       } catch (e) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Error: ${e.toString()}')),
-//         );
-//       }
-//     }
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//         decoration: BoxDecoration(
-//           gradient: LinearGradient(
-//             begin: Alignment.topLeft,
-//             end: Alignment.bottomRight,
-//             colors: [Colors.blue.shade300, Colors.purple.shade300],
-//           ),
-//         ),
-//         child: SafeArea(
-//           child: Center(
-//             child: SingleChildScrollView(
-//               child: Padding(
-//                 padding: const EdgeInsets.all(24.0),
-//                 child: Card(
-//                   elevation: 8,
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(16),
-//                   ),
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(24.0),
-//                     child: Form(
-//                       key: _formKey,
-//                       child: Column(
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           Icon(
-//                             Icons.lock,
-//                             size: 80,
-//                             color: Theme.of(context).primaryColor,
-//                           ),
-//                           const SizedBox(height: 24),
-//                           Text(
-//                             _isLogin ? 'Welcome Back' : 'Create Account',
-//                             style: const TextStyle(
-//                               fontSize: 24,
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                           ),
-//                           const SizedBox(height: 24),
-//                           TextFormField(
-//                             controller: _usernameController,
-//                             decoration: InputDecoration(
-//                               labelText: 'Username',
-//                               prefixIcon: const Icon(Icons.person),
-//                               border: OutlineInputBorder(
-//                                 borderRadius: BorderRadius.circular(12),
-//                               ),
-//                             ),
-//                             validator: (value) =>
-//                             value!.isEmpty ? 'Please enter your username' : null,
-//                             onFieldSubmitted: (_) {
-//                               if (_passwordController.text.isNotEmpty) {
-//                                 _submitForm();
-//                               }
-//                             },
-//                           ),
-//                           const SizedBox(height: 16),
-//                           TextFormField(
-//                             controller: _passwordController,
-//                             decoration: InputDecoration(
-//                               labelText: 'Password',
-//                               prefixIcon: const Icon(Icons.lock),
-//                               suffixIcon: IconButton(
-//                                 icon: Icon(
-//                                   _isObscure ? Icons.visibility : Icons.visibility_off,
-//                                 ),
-//                                 onPressed: () {
-//                                   setState(() {
-//                                     _isObscure = !_isObscure;
-//                                   });
-//                                 },
-//                               ),
-//                               border: OutlineInputBorder(
-//                                 borderRadius: BorderRadius.circular(12),
-//                               ),
-//                             ),
-//                             obscureText: _isObscure,
-//                             validator: (value) =>
-//                             value!.isEmpty ? 'Please enter your password' : null,
-//                             onFieldSubmitted: (_) {
-//                               if (_usernameController.text.isNotEmpty) {
-//                                 _submitForm();
-//                               }
-//                             },
-//                           ),
-//                           const SizedBox(height: 24),
-//                           ElevatedButton(
-//                             onPressed: _submitForm,
-//                             style: ElevatedButton.styleFrom(
-//                               minimumSize: const Size(double.infinity, 50),
-//                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(12),
-//                               ),
-//                             ),
-//                             child: Text(_isLogin ? 'Login' : 'Sign Up'),
-//                           ),
-//                           const SizedBox(height: 16),
-//                           TextButton(
-//                             onPressed: () => setState(() => _isLogin = !_isLogin),
-//                             child: Text(
-//                               _isLogin
-//                                   ? 'Need an account? Sign Up'
-//                                   : 'Already have an account? Login',
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// class AuthPage extends StatefulWidget {
-//   const AuthPage({Key? key}) : super(key: key);
-//
-//   @override
-//   _AuthPageState createState() => _AuthPageState();
-// }
-
 class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -330,27 +114,27 @@ class _AuthPageState extends State<AuthPage> {
           );
           String id = response.user!.id;
         //  success sign in
-          var t_response;
-          t_response = await supabase
+          dynamic tResponse;
+          tResponse = await supabase
               .from('user_data')
               .select()
               .maybeSingle();
           // no data
-          if (t_response==null){
+          if (tResponse==null){
             await supabase
                 .from('user_data')
                 .insert({ 'user_id': id,'user_data': [] });
             otpUris= [];
 
           }else {
-            if (t_response['user_data'] == null) {
+            if (tResponse['user_data'] == null) {
               await supabase
                   .from('user_data')
                   .update({'userdata': []})
                   .eq('user_id', id);
               otpUris= [];
             } else {
-              otpUris = List.from(t_response['user_data']);
+              otpUris = List.from(tResponse['user_data']);
             }
           }
           loginUsername = _emailController.text;
@@ -361,7 +145,7 @@ class _AuthPageState extends State<AuthPage> {
           asyncPrefs.setStringList("otpUris", otpUris);
 
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => MainPage()),
+            MaterialPageRoute(builder: (_) => const MainPage()),
           );
         }
          else {
@@ -512,8 +296,9 @@ class _AuthPageState extends State<AuthPage> {
 Future<void> logout(BuildContext context) async {
   await asyncPrefs.remove("loginUsername");
   await asyncPrefs.remove("loginPasswordHash");
+  supabase.auth.signOut();
   Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => AuthPage()),
+                MaterialPageRoute(builder: (_) => const AuthPage()),
               );
   
 }
@@ -542,7 +327,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      ListViewPage(),
+      const ListViewPage(),
       SettingsPage(),
     ];
   }
@@ -1152,7 +937,6 @@ String? _processQRCodeImage(img.Image image) {
 
 
 class SettingsPage extends StatelessWidget {
-  final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
@@ -1197,7 +981,7 @@ class SettingsPage extends StatelessWidget {
                   );
                   return;
                 }
-                final response = await supabase.auth.updateUser(UserAttributes(
+                await supabase.auth.updateUser(UserAttributes(
                     password: _newPasswordController.text
                 ));
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -1256,58 +1040,6 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
-  // Future<void> _exportData(BuildContext context) async {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
-  //   );
-  // }
-  //
-  // Future<void> _loadData(BuildContext context) async {
-  //
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles();
-  //
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(content: Text('Unimplemented. Use backup Data for now.')),
-  //   );
-
-    // if (result != null) {
-    //   String content;
-    //     if (kIsWeb) {
-    //       // For web
-    //       var fileBytes = result.files.first.bytes;
-    //       content = utf8.decode(fileBytes!);
-    //     } else {
-    //       // For mobile and desktop
-    //       File file = File(result.files.single.path!);
-    //       content = await file.readAsString();
-    //     }
-
-    //   // Use the userData to update the application state
-    //   try{
-        
-    //     List<String> userData = json.decode(content);
-    //     bool allStringsSatisfyCondition = userData.every((str) => _isValidOtpUri(str));
-    //     if (!allStringsSatisfyCondition) {
-    //       throw Exception("Invalid file content");
-    //     }
-
-    //     otpUris = List.from(userData);
-
-    //   }catch (e) {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('File format not correct.')),
-    //   );
-    //   }  
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Data loaded successfully')),
-    //   );
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('No file selected')),
-    //   );
-    // }
-  // }
-
   Future<void> _deleteAccount(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -1331,12 +1063,13 @@ class SettingsPage extends StatelessWidget {
       try {
         // Implement account deletion here
         // For now, just return to the login page
-        final response = await supabase.from('users').delete().eq('username', loginUsername);
-        if(response == null){
-          throw "Error deleting account";
-        }
+        // final response = await supabase.from('users').delete().eq('username', loginUsername);
+        // if(response == null){
+        //   throw "Error deleting account";
+        // }
+        logout(context);
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => AuthPage()),
+          MaterialPageRoute(builder: (_) => const AuthPage()),
           (route) => false,
         );
       } catch (e) {
@@ -1366,16 +1099,6 @@ class SettingsPage extends StatelessWidget {
           title: const Text('Backup Data'),
           onTap: () => _backupData(context),
         ),
-        // ListTile(
-        //   leading: const Icon(Icons.file_upload),
-        //   title: const Text('Export All OTPs'),
-        //   onTap: () => _exportData(context),
-        // ),
-        // ListTile(
-        //   leading: const Icon(Icons.file_download),
-        //   title: const Text('Load Batch OTPs'),
-        //   onTap: () => _loadData(context),
-        // ),
         ListTile(
           leading: const Icon(Icons.delete_forever, color: Colors.red),
           title: const Text('Delete Account', style: TextStyle(color: Colors.red)),
