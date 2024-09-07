@@ -13,13 +13,20 @@ While Google Authenticator is a popular choice for OTP, it has some limitations:
 
 This project aims to solve these issues by providing a cross-platform solution that allows you to use OTP codes on your preferred device, whether it's your phone, tablet, or computer. Additionally, our QR code export feature ensures you're never locked into our app - you can easily transfer your OTPs to other authenticator apps or create backups.
 
-## 🥳 Tested Platform
+## 🥳 Tested Platforms
 ### Supported
 <div style="display: flex; align-items: center; gap: 20px;">
   <img src="https://github.com/fluidicon.png" alt="GitHub" width="48" height="48">
   <img src="https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-d.png" alt="NVIDIA" width="120" height="48">
   <img src="https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg" alt="Cloudflare" width="200" height="48">
+  s<img src="https://www.godaddy.com/assets/images/logos/logo-godaddy-og.jpg" alt="GoDaddy" width="96" height="48">
+  <img src="https://public.bnbstatic.com/static/images/common/binance-logo.png" alt="Binance" width="96" height="48">
+  <img src="https://nexusdb.com/img/nexus-logo.png" alt="Nexus" width="96" height="48">
+  <img src="https://parsec.app/static/favicon/android-chrome-512x512.png" alt="Parsec" width="48" height="48">
+  <img src="https://www.notion.so/front-static/logo-ios.png" alt="Notion" width="48" height="48">
+  <img src="https://brand.heroku.com/static/media/heroku-logotype-vertical.f7e1193f.svg" alt="Heroku" width="96" height="48">
 </div>
+
 
 ### Not supported
 Feel free to post issue for platforms with standard OTP but not supported for this app.
