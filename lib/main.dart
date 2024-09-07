@@ -139,7 +139,7 @@ class _AuthPageState extends State<AuthPage> {
             if (tResponse['user_data'] == null) {
               await supabase
                   .from('user_data')
-                  .update({'userdata': []})
+                  .update({'user_data': []})
                   .eq('user_id', id);
               otpUris= [];
             } else {
@@ -1027,13 +1027,13 @@ class SettingsPage extends StatelessWidget {
 
   Future<void> _pullData(BuildContext context) async {
     try {
-      final response = await supabase
+      var response = await supabase
           .from('user_data')
           .select()
           .maybeSingle();
 
-      if (response != null) {
-        var userData = response['userdata'];
+      if (response['user_data'] != null) {
+        var userData = response['user_data'];
         // Use the userData as needed
         otpUris = List.from(userData);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1042,7 +1042,7 @@ class SettingsPage extends StatelessWidget {
       }
     }catch (e){
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud.')),
+        SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
       );
     }
   }
@@ -1088,10 +1088,6 @@ class SettingsPage extends StatelessWidget {
       try {
         // Implement account deletion here
         // For now, just return to the login page
-        // final response = await supabase.from('users').delete().eq('username', loginUsername);
-        // if(response == null){
-        //   throw "Error deleting account";
-        // }
         logout(context);
         // Navigator.of(context).pushAndRemoveUntil(
         //   MaterialPageRoute(builder: (_) => const AuthPage()),

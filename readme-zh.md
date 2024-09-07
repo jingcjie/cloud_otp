@@ -1,6 +1,6 @@
 # 🔐 跨平台OTP认证器
 
-一个用Dart构建的多功能一次性密码（OTP）认证器应用程序，支持多个平台，包括Windows、Linux、Web、Android、iOS和macOS。
+一个用Dart构建的多功能一次性密码（OTP）认证器应用程序(所有源代码可见)，支持多个平台，包括Windows、Linux、Web、Android、iOS和macOS。
 
 [English README](./README.md)
 ## 🤔 为什么开发这个项目？

@@ -1,6 +1,6 @@
 # 🔐 Cross-Platform OTP Authenticator
 
-A versatile One-Time Password (OTP) authenticator application built with Dart, supporting multiple platforms including Windows, Linux, Web, Android, iOS, and macOS.
+A versatile Open-Source One-Time Password (OTP) authenticator application built with Dart, supporting multiple platforms including Windows, Linux, Web, Android, iOS, and macOS.
 
 [中文版 README](./readme-zh.md)
 ## 🤔 Why This Project?
