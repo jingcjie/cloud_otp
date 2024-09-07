@@ -19,10 +19,8 @@ This project aims to solve these issues by providing a cross-platform solution t
   <img src="https://github.com/fluidicon.png" alt="GitHub" width="48" height="48">
   <img src="https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-d.png" alt="NVIDIA" width="120" height="48">
   <img src="https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg" alt="Cloudflare" width="200" height="48">
-  s<img src="https://www.godaddy.com/assets/images/logos/logo-godaddy-og.jpg" alt="GoDaddy" width="96" height="48">
-  <img src="https://public.bnbstatic.com/static/images/common/binance-logo.png" alt="Binance" width="96" height="48">
-  <img src="https://nexusdb.com/img/nexus-logo.png" alt="Nexus" width="96" height="48">
-  <img src="https://parsec.app/static/favicon/android-chrome-512x512.png" alt="Parsec" width="48" height="48">
+  <img src="https://avatars.githubusercontent.com/u/17085531?s=200&v=4" alt="Nexus mod" width="96" height="48">
+  <img src="https://avatars.githubusercontent.com/u/22990620?s=200&v=4" alt="Parsec" width="48" height="48">
   <img src="https://www.notion.so/front-static/logo-ios.png" alt="Notion" width="48" height="48">
   <img src="https://brand.heroku.com/static/media/heroku-logotype-vertical.f7e1193f.svg" alt="Heroku" width="96" height="48">
 </div>
