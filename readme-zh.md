@@ -19,6 +19,8 @@
   <img src="https://avatars.githubusercontent.com/u/22990620?s=200&v=4" alt="Parsec" width="48" height="48">
   <img src="https://www.notion.so/front-static/logo-ios.png" alt="Notion" width="48" height="48">
   <img src="https://avatars.githubusercontent.com/u/23211?s=200&v=4" alt="Heroku" width="48" height="48">
+  <img src="https://www.v2ex.com/static/img/v2ex@2x.png" alt="V2EX" width="96" height="48">
+  <img src="https://cdn.worldvectorlogo.com/logos/binance.svg" alt="Binance" width="96" height="48">
 </div>
 
 
