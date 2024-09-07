@@ -1026,42 +1026,88 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> _pullData(BuildContext context) async {
-    try {
-      var response = await supabase
-          .from('user_data')
-          .select()
-          .maybeSingle();
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Pull Data'),
+          content: const Text('This will overwrite the data in local storage. Are you sure you want to proceed?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              child: const Text('Proceed'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
 
-      if (response['user_data'] != null) {
-        var userData = response['user_data'];
-        // Use the userData as needed
-        otpUris = List.from(userData);
+    if (confirm == true) {
+      // Perform the pull data operation
+      try {
+        var response = await supabase
+            .from('user_data')
+            .select()
+            .maybeSingle();
+
+        if (response['user_data'] != null) {
+          var userData = response['user_data'];
+          // Use the userData as needed
+          otpUris = List.from(userData);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Data pulled successfully')),
+          );
+        }
+      }catch (e){
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data pulled successfully')),
+          SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
         );
       }
-    }catch (e){
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
-      );
     }
   }
 
   Future<void> _backupData(BuildContext context) async {
-    var userData = List.from(otpUris); // Populate this with the user data to be backed up
-    try {
-      String id = supabase.auth.currentUser!.id;
-      await supabase
-          .from('user_data')
-          .update({ 'user_data': userData })
-          .eq('user_id', id);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Data backed up successfully')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to backup data')),
-      );
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Backup Data'),
+          content: const Text('This will overwrite the data in web storage. Are you sure you want to proceed?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              child: const Text('Proceed'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      // Perform the backup data operation
+      var userData = List.from(otpUris); // Populate this with the user data to be backed up
+      try {
+        String id = supabase.auth.currentUser!.id;
+        await supabase
+            .from('user_data')
+            .update({ 'user_data': userData })
+            .eq('user_id', id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data backed up successfully')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to backup data')),
+        );
+      }
     }
   }
 
