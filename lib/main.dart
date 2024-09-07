@@ -11,7 +11,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-
+import 'dart:io' show Platform;
 
 
 final supabase = Supabase.instance.client;
@@ -99,6 +99,15 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLogin = true;
   bool _isObscure = true;
   bool _isLoading = false;
+  final _passwordFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -231,10 +240,12 @@ class _AuthPageState extends State<AuthPage> {
                             validator: (value) =>
                             value!.isEmpty ? 'Please enter your email' : null,
                             keyboardType: TextInputType.emailAddress,
+                            onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_passwordFocusNode),
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
+                            focusNode: _passwordFocusNode,
                             decoration: InputDecoration(
                               labelText: 'Password',
                               prefixIcon: const Icon(Icons.lock),
@@ -255,6 +266,11 @@ class _AuthPageState extends State<AuthPage> {
                             obscureText: _isObscure,
                             validator: (value) =>
                             value!.isEmpty ? 'Please enter your password' : null,
+                            onFieldSubmitted: (_) {
+                              if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+                                _submitForm();
+                              }
+                            },
                           ),
                           const SizedBox(height: 24),
                           ElevatedButton(
@@ -844,12 +860,12 @@ void _exportOtp(BuildContext context, int index) {
 void _qrScanner() async {
   String? scannedData;
 
-  if (kIsWeb) {
-    // Web-specific implementation
-    scannedData = await _webQRScanner();
-  } else {
+  if (Platform.isAndroid) {
     // Check for mobile platforms without using dart:io
     scannedData = await _mobileQRScanner();
+  } else {
+    // Web-specific implementation
+    scannedData = await _webQRScanner();
   }
 
   if (scannedData != null) {
@@ -881,26 +897,35 @@ Future<String?> _webQRScanner() async {
 }
 
 
-Future<String?> _mobileQRScanner() async {
-  return Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => Scaffold(
-        appBar: AppBar(title: const Text('Scan QR Code')),
-        body: MobileScanner(
-          onDetect: (capture) {
-            final List<Barcode> barcodes = capture.barcodes;
-            for (final barcode in barcodes) {
-              if (barcode.rawValue != null) {
-                Navigator.of(context).pop(barcode.rawValue);
-                return;
+  Future<String?> _mobileQRScanner() async {
+    String? result;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: const Text('Scan QR Code'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          body: MobileScanner(
+            onDetect: (capture) {
+              final List<Barcode> barcodes = capture.barcodes;
+              for (final barcode in barcodes) {
+                if (barcode.rawValue != null) {
+                  result = barcode.rawValue;
+                  Navigator.of(context).pop();
+                  return;
+                }
               }
-            }
-          },
+            },
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+    return result;
+  }
 
 String? _processQRCodeImage(img.Image image) {
   // Convert image to grayscale
@@ -1068,10 +1093,10 @@ class SettingsPage extends StatelessWidget {
         //   throw "Error deleting account";
         // }
         logout(context);
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AuthPage()),
-          (route) => false,
-        );
+        // Navigator.of(context).pushAndRemoveUntil(
+        //   MaterialPageRoute(builder: (_) => const AuthPage()),
+        //   (route) => false,
+        // );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error deleting account: ${e.toString()}')),
