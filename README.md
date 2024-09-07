@@ -27,7 +27,7 @@ This project aims to solve these issues by providing a cross-platform solution t
 ### Quick Access Options
 
 - 🌐 **Web Version**: Visit [https://cloudotp.me/](https://cloudotp.me/) to use the OTP Authenticator directly in your browser.
-- 📥 **Pre-compiled Releases**: If you don't want to compile the application yourself, you can download pre-compiled releases from [GitHub Releases page](https://github.com/jingcjie/cloud_otp/releases/tag/release).
+- 📥 **Pre-compiled Releases**: If you don't want to compile the application yourself, you can download pre-compiled releases from [GitHub Releases page](https://github.com/jingcjie/cloud_otp/releases/latest).
 
 ### Prerequisites (for compiling from source)
 
