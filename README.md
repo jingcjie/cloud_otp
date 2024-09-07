@@ -29,7 +29,7 @@ This project aims to solve these issues by providing a cross-platform solution t
 
 
 ### Not supported
-Feel free to post issue for platforms with standard OTP but not supported for this app.
+Feel free to post issue for platforms with standard OTP but not supported for this app. ❤️
 
 ## ✨ Features
 
