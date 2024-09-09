@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image/image.dart' as img;
@@ -153,12 +154,6 @@ class _AuthPageState extends State<AuthPage> {
           await prefs.setString("loginPassword", loginPassword);
           await prefs.setStringList("otpUris", otpUris);
 
-          final Set<String> keys = await Future.value(prefs.getKeys());
-          if (kDebugMode) {
-            print(keys);
-
-          }
-
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const MainPage()),
           );
@@ -282,7 +277,7 @@ class _AuthPageState extends State<AuthPage> {
                           ElevatedButton(
                             onPressed: _isLoading ? null : _submitForm,
                             style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 50),
+                              minimumSize: Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -349,7 +344,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      const ListViewPage(),
+      ListViewPage(),
       SettingsPage(),
     ];
   }
@@ -497,8 +492,10 @@ class QRCodeDialog extends StatelessWidget {
 
 
 class ListViewPage extends StatefulWidget {
-  const ListViewPage({super.key});
+  ListViewPage({super.key});
 
+  // late List<String> originalUris;
+  final List<String> initialOtpUris = List.from(otpUris);
 
   @override
   _ListViewPageState createState() => _ListViewPageState();
@@ -510,12 +507,19 @@ class _ListViewPageState extends State<ListViewPage> {
   late List<bool> _isExpanded;
   late List<double> _progress;
   late List<Timer> _timers;
-  // late List<String> originalUris;
 
   @override
   void initState() {
     super.initState();
     _initializeState();
+  }
+
+  @override
+  void didUpdateWidget(ListViewPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialOtpUris != oldWidget.initialOtpUris) {
+      initState();
+    }
   }
 
 void _initializeState() {
@@ -663,40 +667,32 @@ void _exportOtp(BuildContext context, int index) {
 }
 
   void _deleteOtp(int index) {
-    setState(() {
-      try {
-        // Remove the OTP URI from the list
-        otpUris.removeAt(index);
-        // Update the stored URIs in SharedPreferences
-        prefs.setStringList('otpUris', otpUris);
-
-        // Remove the OTP item from the list
-        otpItems.removeAt(index);
-
-        // Remove the corresponding expansion state
-        _isExpanded.removeAt(index);
-
-        // Cancel and remove the timer
-        _timers[index].cancel();
-        _timers.removeAt(index);
-
-        // Remove the progress indicator value
-        _progress.removeAt(index);
-
-        // Remove the current OTP value
-        currentOtps.removeAt(index);
-
-        // Show a success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Deleted successfully')),
-        );
-      } catch (e) {
-        print('Error deleting OTP: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete OTP: $e')),
-        );
-      }
-    });
+    try {
+      // Remove the OTP URI from the list
+      otpUris.removeAt(index);
+      // Remove the OTP item from the list
+      otpItems.removeAt(index);
+      // Remove the corresponding expansion state
+      _isExpanded.removeAt(index);
+      // Cancel and remove the timer
+      _timers[index].cancel();
+      _timers.removeAt(index);
+      // Remove the progress indicator value
+      _progress.removeAt(index);
+      // Remove the current OTP value
+      currentOtps.removeAt(index);
+      // Update the stored URIs in SharedPreferences
+      prefs.setStringList('otpUris', otpUris);
+      // Show a success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Deleted successfully')),
+      );
+    } catch (e) {
+      print('Error deleting OTP: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete OTP: $e')),
+      );
+    }
   }
 
   @override
@@ -888,9 +884,11 @@ void _qrScanner() async {
 }
 
 Future<String?> _webQRScanner() async {
+  String? string_result;
   // For web, we'll use file picker to select an image
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.image,
+    withData: true,
   );
 
   if (result != null) {
@@ -898,24 +896,11 @@ Future<String?> _webQRScanner() async {
     img.Image? image = img.decodeImage(fileBytes);
 
     if (image != null) {
-      img.Image resizedImage = img.copyResize(image, width: 500);
-      return compute(_processQRCodeImage, resizedImage);
+      string_result = _processQRCodeImage(image);
     }
   }
-  return null;
+  return string_result;
 }
-  // Future<String?> _webQRScanner() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.image,
-  //     withData: true,
-  //   );
-  //
-  //   if (result != null && result.files.isNotEmpty) {
-  //     Uint8List fileBytes = result.files.first.bytes!;
-  //     return compute(_processQRCodeImage, fileBytes);
-  //   }
-  //   return null;
-  // }
 
   String? _processQRCodeImage(img.Image image) {
     LuminanceSource source = RGBLuminanceSource(
