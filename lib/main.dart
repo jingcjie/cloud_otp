@@ -19,7 +19,7 @@ late List<String> otpUris;
 late String loginUsername;
 late String loginPassword;
 bool needToLogin=true;
-final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+final SharedPreferencesAsync prefs = SharedPreferencesAsync();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,10 +29,10 @@ Future<void> main() async {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbGFhaGZ2eWZmcXpvcXd3ZWdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ5MTcyMjcsImV4cCI6MjA0MDQ5MzIyN30.wAmbOCF70IcnqVylOUq9FqSzv3_pXcc7uEgVi7_qTQk',
   );
 
-  otpUris = (await asyncPrefs.getStringList("otpUris"))??[];
+  otpUris = (await prefs.getStringList("otpUris"))??[];
   try{
-    String savedLoginusername = (await asyncPrefs.getString("loginUsername"))!;
-    String savedLoginPassword = (await asyncPrefs.getString("loginPassword"))!;
+    String savedLoginusername = (await prefs.getString("loginUsername"))!;
+    String savedLoginPassword = (await prefs.getString("loginPassword"))!;
     final response = await supabase.auth.signInWithPassword(
       email: savedLoginusername,
       password: savedLoginPassword,
@@ -149,9 +149,15 @@ class _AuthPageState extends State<AuthPage> {
           loginUsername = _emailController.text;
           loginPassword = _passwordController.text;
 
-          asyncPrefs.setString("loginUsername", loginUsername);
-          asyncPrefs.setString("loginPasswordHash", loginPassword);
-          asyncPrefs.setStringList("otpUris", otpUris);
+          await prefs.setString("loginUsername", loginUsername);
+          await prefs.setString("loginPassword", loginPassword);
+          await prefs.setStringList("otpUris", otpUris);
+
+          final Set<String> keys = await Future.value(prefs.getKeys());
+          if (kDebugMode) {
+            print(keys);
+
+          }
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const MainPage()),
@@ -310,8 +316,8 @@ class _AuthPageState extends State<AuthPage> {
 
 
 Future<void> logout(BuildContext context) async {
-  await asyncPrefs.remove("loginUsername");
-  await asyncPrefs.remove("loginPasswordHash");
+  await prefs.remove("loginUsername");
+  await prefs.remove("loginPassword");
   supabase.auth.signOut();
   Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => const AuthPage()),
@@ -598,7 +604,7 @@ void _setDefaultValues() {
     setState(() {
       try {
         otpUris.add(uri);
-        asyncPrefs.setStringList('otpUris', otpUris);
+        prefs.setStringList('otpUris', otpUris);
         // originalUris.add(uri);
         final newOtpItem = OtpItem.fromUri(uri);
         otpItems.add(newOtpItem);
@@ -662,7 +668,7 @@ void _exportOtp(BuildContext context, int index) {
         // Remove the OTP URI from the list
         otpUris.removeAt(index);
         // Update the stored URIs in SharedPreferences
-        asyncPrefs.setStringList('otpUris', otpUris);
+        prefs.setStringList('otpUris', otpUris);
 
         // Remove the OTP item from the list
         otpItems.removeAt(index);
@@ -890,17 +896,54 @@ Future<String?> _webQRScanner() async {
   if (result != null) {
     Uint8List fileBytes = result.files.first.bytes!;
     img.Image? image = img.decodeImage(fileBytes);
-    
+
     if (image != null) {
-      return _processQRCodeImage(image);
+      img.Image resizedImage = img.copyResize(image, width: 500);
+      return compute(_processQRCodeImage, resizedImage);
     }
   }
   return null;
 }
+  // Future<String?> _webQRScanner() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.image,
+  //     withData: true,
+  //   );
+  //
+  //   if (result != null && result.files.isNotEmpty) {
+  //     Uint8List fileBytes = result.files.first.bytes!;
+  //     return compute(_processQRCodeImage, fileBytes);
+  //   }
+  //   return null;
+  // }
+
+  String? _processQRCodeImage(img.Image image) {
+    LuminanceSource source = RGBLuminanceSource(
+        image.width,
+        image.height,
+        image
+            .convert(numChannels: 4)
+            .getBytes(order: img.ChannelOrder.abgr)
+            .buffer
+            .asInt32List());
+    var bitmap = BinaryBitmap(GlobalHistogramBinarizer(source));
+
+    try {
+      var result = QRCodeReader().decode(bitmap);
+      return result.text;
+    } catch (e) {
+      print('Error decoding QR code: $e');
+      return null;
+    }
+  }
+
+
 
 
   Future<String?> _mobileQRScanner() async {
     String? result;
+    bool hasScanned = false;
+
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
@@ -913,11 +956,13 @@ Future<String?> _webQRScanner() async {
           ),
           body: MobileScanner(
             onDetect: (capture) {
+              if (hasScanned) return; // Prevent multiple scans
               final List<Barcode> barcodes = capture.barcodes;
               for (final barcode in barcodes) {
                 if (barcode.rawValue != null) {
+                  hasScanned = true;
                   result = barcode.rawValue;
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(); // This should close the scanner page
                   return;
                 }
               }
@@ -926,39 +971,16 @@ Future<String?> _webQRScanner() async {
         ),
       ),
     );
+
+    // If we've reached this point and hasScanned is still false,
+    // it means the user manually went back without scanning
+    if (!hasScanned) {
+      result = null;
+    }
+
     return result;
   }
 
-String? _processQRCodeImage(img.Image image) {
-  // Convert image to grayscale
-  img.Image grayscale = img.grayscale(image);
-  
-  // Convert the grayscale image to Int32List
-  Int32List pixels = Int32List(grayscale.width * grayscale.height);
-  for (int y = 0; y < grayscale.height; y++) {
-    for (int x = 0; x < grayscale.width; x++) {
-      img.Pixel pixel = grayscale.getPixel(x, y);
-      // In a grayscale image, we can use any channel (r, g, or b) as they should all be the same
-      int grayscaleValue = pixel.r.toInt();
-      pixels[y * grayscale.width + x] = grayscaleValue;
-    }
-  }
-
-  LuminanceSource source = RGBLuminanceSource(
-    grayscale.width,
-    grayscale.height,
-    pixels,
-  );
-  var bitmap = BinaryBitmap(HybridBinarizer(source));
-  
-  try {
-    var result = QRCodeReader().decode(bitmap);
-    return result.text;
-  } catch (e) {
-    print('Error decoding QR code: $e');
-    return null;
-  }
-}
 }
 
 
