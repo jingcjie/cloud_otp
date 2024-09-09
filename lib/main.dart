@@ -904,18 +904,6 @@ Future<String?> _webQRScanner() async {
   }
   return null;
 }
-  // Future<String?> _webQRScanner() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.image,
-  //     withData: true,
-  //   );
-  //
-  //   if (result != null && result.files.isNotEmpty) {
-  //     Uint8List fileBytes = result.files.first.bytes!;
-  //     return compute(_processQRCodeImage, fileBytes);
-  //   }
-  //   return null;
-  // }
 
   String? _processQRCodeImage(img.Image image) {
     LuminanceSource source = RGBLuminanceSource(
