@@ -859,15 +859,17 @@ void _exportOtp(BuildContext context, int index) {
 
 void _qrScanner() async {
   String? scannedData;
-
-  if (Platform.isAndroid) {
-    // Check for mobile platforms without using dart:io
-    scannedData = await _mobileQRScanner();
-  } else {
-    // Web-specific implementation
+  if (kIsWeb){
     scannedData = await _webQRScanner();
+  }else{
+    if (Platform.isAndroid) {
+      // Check for mobile platforms without using dart:io
+      scannedData = await _mobileQRScanner();
+    } else {
+      // Web-specific implementation
+      scannedData = await _webQRScanner();
+    }
   }
-
   if (scannedData != null) {
     if (_isValidOtpUri(scannedData)) {
       _addOtp(scannedData);
