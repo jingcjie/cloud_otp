@@ -1067,6 +1067,7 @@ class SettingsPage extends StatelessWidget {
           var userData = response['user_data'];
           // Use the userData as needed
           otpUris = List.from(userData);
+          await prefs.setStringList("otpUris", otpUris);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Data pulled successfully')),
           );
