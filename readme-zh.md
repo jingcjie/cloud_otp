@@ -40,6 +40,8 @@
 ### 快速访问选项（这个可以看👌)
 
 - 🌐 **网页版**：访问 [https://cloudotp.me/](https://cloudotp.me/) 直接在浏览器中使用OTP认证器。
+- 🏪 **微软商店（win10+)**: 一键下载安装。
+<a href='https://www.microsoft.com/store/apps/9pld5r9rpwpx?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width='142px' height='52px'/></a>
 - 📥 **预编译版本**：如果您不想自己编译应用程序，可以从 [GitHub Releases 页面](https://github.com/jingcjie/cloud_otp/releases/latest) 下载预编译版本。（本人非苹果用户，mac,ios自己编译去哈😘/为什么不直接用web）
 
 ### 前提条件（用于从源代码编译）(非程序员止步😘)
