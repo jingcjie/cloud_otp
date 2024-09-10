@@ -86,6 +86,14 @@ Feel free to post issue for platforms with standard OTP but not supported for th
   ```
   flutter run
   ```
+- Android split abi:
+  ```
+  flutter build apk --split-per-abi
+  ```
+- Windows msix:
+  ```
+  dart run msix:create
+  ```
 
 ## 💡 Key Features Highlight
 
