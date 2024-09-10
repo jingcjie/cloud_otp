@@ -46,6 +46,7 @@ Feel free to post issue for platforms with standard OTP but not supported for th
 
 - 🌐 **Web Version**: Visit [https://cloudotp.me/](https://cloudotp.me/) to use the OTP Authenticator directly in your browser.
 - 🏪 **Microsoft Store**: Get the app from the Microsoft Store for easy installation on Windows devices.
+
 <a href='https://www.microsoft.com/store/apps/9pld5r9rpwpx?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width='142px' height='52px'/></a>
 - 📥 **Pre-compiled Releases**: If you don't want to compile the application yourself, you can download pre-compiled releases from [GitHub Releases page](https://github.com/jingcjie/cloud_otp/releases/latest).
 
