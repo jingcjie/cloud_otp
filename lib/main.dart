@@ -448,8 +448,8 @@ class QRCodeDialog extends StatelessWidget {
     return Dialog(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.4,
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
+          maxWidth: MediaQuery.sizeOf(context).width * 0.4,
+          maxHeight: MediaQuery.sizeOf(context).height * 0.8,
         ),
         child: SingleChildScrollView(
           child: Padding(
