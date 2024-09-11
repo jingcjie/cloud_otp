@@ -41,7 +41,7 @@ When user chose to use local mode, data will be stored locally. Clean the app da
 The data visibility is restricted to each unique id.
 This is ensured by [Row-Level-Security](https://supabase.com/docs/guides/database/postgres/row-level-security) rules.
 ```sql
-    alter policy "Enable read access for this users"
+    alter policy "Only enable read access for this users"
     on "authenticated"."user_data"
     to authenticated
     using (
