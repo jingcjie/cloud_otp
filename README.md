@@ -35,7 +35,7 @@ Feel free to post issue for platforms with standard OTP but not supported for th
 
 ### Local mode
 
-When user chose to use local mode, data will be stored locally. Clean the app data will lose the data stored locally.
+When user chose to use local mode, data will be stored locally. Clean the app data will lose the data stored.
 
 ### Cloud mode
 The data visibility is restricted to each unique id.
