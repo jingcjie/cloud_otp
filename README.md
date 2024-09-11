@@ -31,14 +31,23 @@ This project aims to solve these issues by providing a cross-platform solution t
 ### Not supported
 Feel free to post issue for platforms with standard OTP but not supported for this app. ❤️
 
-## ✨ Features
+## ✨ Data Security
 
-- 🖥️ 📱 Cross-platform support: Use on desktop, web, and mobile devices
-- 🔄 Multi-device synchronization: Access your OTP codes from any device
-- 👥 User-friendly interface: Easy to add, manage, and use OTP codes
-- 🛡️ Secure: Implements industry-standard OTP algorithms
-- 📱💻 QR Code Export: Generate QR codes for each OTP, enabling easy transfer to other authenticator apps
-- 💾 Backup and Restore: Save your OTP setups as QR codes for foolproof backups
+### Local mode
+
+When user chose to use local mode, data will be stored locally. Clean the app data will lose the data stored locally.
+
+### Cloud mode
+The data visibility is restricted to each unique id.
+This is ensured by [https://supabase.com/docs/guides/database/postgres/row-level-security](Row-Level-Security) rules.
+```sql
+    alter policy "Enable read access for this users"
+    on "authenticated"."user_data"
+    to authenticated
+    using (
+      (( SELECT auth.uid() AS uid) = user_id)
+    );
+```
 
 ## 🚀 Getting Started
 
