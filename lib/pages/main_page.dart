@@ -1,5 +1,6 @@
 import 'package:cloud_otp/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'settings_page.dart';
 import 'list_view_page.dart';
 
@@ -49,9 +50,10 @@ class _MainPageState extends State<MainPage> {
         title: const Text('Cloud OTP'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.exit_to_app_rounded),
             onPressed: () {
-              logout(context);
+              // logout(context);
+              exit(0);
             },
           ),
         ],
