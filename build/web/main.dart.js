@@ -44726,7 +44726,7 @@ A.aqD.prototype={
 $1(a){return B.kJ},
 $S:153}
 A.aqG.prototype={
-$1(a){return A.ur(A.a([A.fd(B.a4U,new A.aqE(a),null),A.fd(B.a4F,new A.aqF(a),null)],t.D),B.a4R,B.a4Y)},
+$1(a){return A.ur(A.a([A.fd(B.a4T,new A.aqE(a),null),A.fd(B.a4F,new A.aqF(a),null)],t.D),B.a4Q,B.a4Y)},
 $S:51}
 A.aqE.prototype={
 $0(){return A.dF(this.a,!1).ix(!0)},
@@ -44890,7 +44890,7 @@ r===$&&A.b()
 r.jy("otpUris",q,B.b7)
 q=o.c.ae(t.O)
 q.toString
-q.f.f_(B.a_p)}catch(p){s=A.ah(p)
+q.f.f_(B.a_o)}catch(p){s=A.ah(p)
 A.hV("Error deleting OTP: "+A.m(s))
 r=o.c.ae(t.O)
 r.toString
@@ -45098,7 +45098,7 @@ $1(a){var s,r,q=null,p={}
 p.a=p.b=p.c=""
 s=t.D
 r=A.hf(A.a([A.FD(!0,B.bX,!1,q,!0,B.w,q,A.a2R(),q,q,q,q,q,q,2,B.Ir,B.a0,!0,q,!0,q,!1,q,B.c7,q,q,q,q,q,q,q,1,q,q,!1,"\u2022",q,new A.av5(p),q,q,q,!1,q,!1,q,!0,q,B.dM,q,q,B.bR,B.bI,q,q,q,q,q,q,q,B.ax,q,B.ei,q,q,q,q),A.FD(!0,B.bX,!1,q,!0,B.w,q,A.a2R(),q,q,q,q,q,q,2,B.Iq,B.a0,!0,q,!0,q,!1,q,B.c7,q,q,q,q,q,q,q,1,q,q,!1,"\u2022",q,new A.av6(p),q,q,q,!1,q,!1,q,!0,q,B.dM,q,q,B.bR,B.bI,q,q,q,q,q,q,q,B.ax,q,B.ei,q,q,q,q),A.FD(!0,B.bX,!1,q,!0,B.w,q,A.a2R(),q,q,q,q,q,q,2,B.It,B.a0,!0,q,!0,q,!1,q,B.c7,q,q,q,q,q,q,q,1,q,q,!1,"\u2022",q,new A.av7(p),q,q,q,!1,q,!1,q,!0,q,B.dM,q,q,B.bR,B.bI,q,q,q,q,q,q,q,B.ax,q,B.ei,q,q,q,q)],s),B.a3,B.ab,B.aR)
-return A.ur(A.a([A.fd(B.el,new A.av8(a),q),A.fd(B.a4V,new A.av9(p,a),q)],s),r,B.a50)},
+return A.ur(A.a([A.fd(B.el,new A.av8(a),q),A.fd(B.a4U,new A.av9(p,a),q)],s),r,B.a50)},
 $S:51}
 A.av5.prototype={
 $1(a){this.a.c=a},
@@ -45140,11 +45140,11 @@ $S:0}
 A.avp.prototype={
 $0(){var s=this.a.ae(t.O)
 s.toString
-s.f.f_(B.a_o)},
+s.f.f_(B.a_p)},
 $S:0}
 A.Nx.prototype={
 O(a){var s=null
-return A.RP(s,A.hf(A.a([A.a8M(A.iD($.KM?B.a4O:B.a4B,s,s),1),new A.ci(B.GR,A.j5(A.a8c(B.a4A,new A.a8f(a),A.aI7(s,s,A.a1(a).ax.b,s,s,s,3,s,s,B.j,s,s,B.GI,s,new A.cA(A.nJ(12),B.r),s,s,s,s)),s,1/0),s)],t.D),B.a3,B.kI,B.c_),s,s)}}
+return A.RP(s,A.hf(A.a([A.a8M(A.iD($.KM?B.a4N:B.a4B,s,s),1),new A.ci(B.GR,A.j5(A.a8c(B.a4A,new A.a8f(a),A.aI7(s,s,A.a1(a).ax.b,s,s,s,3,s,s,B.j,s,s,B.GI,s,new A.cA(A.nJ(12),B.r),s,s,s,s)),s,1/0),s)],t.D),B.a3,B.kI,B.c_),s,s)}}
 A.a8f.prototype={
 $0(){A.dF(this.a,!1).CS(A.PB(new A.a8e(),null,t.z))},
 $S:0}
@@ -45306,7 +45306,7 @@ break
 case 8:case 4:return A.G(null,r)
 case 1:return A.F(p,r)}})
 return A.H($async$nm,r)},
-O(a){var s=this,r=null,q=A.a([A.Cs(r,r,r,!0,B.oE,r,new A.am8(s,a),r,B.Bo,r,r),A.Cs(r,r,r,!0,B.Ii,r,new A.am9(s,a),r,B.a54,r,r),A.Cs(r,r,r,!0,B.Ij,r,new A.ama(s,a),r,B.a4D,r,r),A.Cs(r,r,r,!0,B.Ig,r,new A.amb(s,a),r,B.a4T,r,r),A.Cs(r,r,r,!0,B.Ia,r,new A.amc(s,a),r,B.a4J,r,r)],t.D),p=A.av([null,0],t.LO,t.S)
+O(a){var s=this,r=null,q=A.a([A.Cs(r,r,r,!0,B.oE,r,new A.am8(s,a),r,B.Bo,r,r),A.Cs(r,r,r,!0,B.Ii,r,new A.am9(s,a),r,B.a54,r,r),A.Cs(r,r,r,!0,B.Ij,r,new A.ama(s,a),r,B.a4D,r,r),A.Cs(r,r,r,!0,B.Ig,r,new A.amb(s,a),r,B.a4S,r,r),A.Cs(r,r,r,!0,B.Ia,r,new A.amc(s,a),r,B.a4I,r,r)],t.D),p=A.av([null,0],t.LO,t.S)
 return new A.Ct(new A.amM(!0,!0,!0,q,p),r,B.aF,!1,r,r,B.mA,!1,r,5,B.a0,B.A2,r,B.w,B.au,r)}}
 A.alX.prototype={
 $1(a){var s=null,r=this.a,q=t.D,p=A.hf(A.a([A.FD(!0,B.bX,!1,s,!0,B.w,s,A.a2R(),r.c,s,s,s,s,s,2,B.Is,B.a0,!0,s,!0,s,!1,s,B.c7,s,s,s,s,s,s,s,1,s,s,!0,"\u2022",s,s,s,s,s,!1,s,!1,s,!0,s,B.dM,s,s,B.bR,B.bI,s,s,s,s,s,s,s,B.ax,s,B.ei,s,s,s,s),A.FD(!0,B.bX,!1,s,!0,B.w,s,A.a2R(),r.d,s,s,s,s,s,2,B.Ip,B.a0,!0,s,!0,s,!1,s,B.c7,s,s,s,s,s,s,s,1,s,s,!0,"\u2022",s,s,s,s,s,!1,s,!1,s,!0,s,B.dM,s,s,B.bR,B.bI,s,s,s,s,s,s,s,B.ax,s,B.ei,s,s,s,s)],q),B.a3,B.ab,B.aR)
@@ -45350,7 +45350,7 @@ case 2:return A.F(o,r)}})
 return A.H($async$$0,r)},
 $S:12}
 A.am7.prototype={
-$1(a){return A.ur(A.a([A.fd(B.el,new A.am5(a),null),A.fd(B.Bn,new A.am6(a),null)],t.D),B.a4L,B.a4S)},
+$1(a){return A.ur(A.a([A.fd(B.el,new A.am5(a),null),A.fd(B.Bn,new A.am6(a),null)],t.D),B.a4K,B.a4R)},
 $S:51}
 A.am5.prototype={
 $0(){return A.dF(this.a,!1).ix(!1)},
@@ -45368,7 +45368,7 @@ A.alT.prototype={
 $0(){return A.dF(this.a,!1).ix(!0)},
 $S:0}
 A.am_.prototype={
-$1(a){return A.ur(A.a([A.fd(B.el,new A.alY(a),null),A.fd(B.a58,new A.alZ(a),null)],t.D),B.a4N,B.a4z)},
+$1(a){return A.ur(A.a([A.fd(B.el,new A.alY(a),null),A.fd(B.a58,new A.alZ(a),null)],t.D),B.a4M,B.a4z)},
 $S:51}
 A.alY.prototype={
 $0(){return A.dF(this.a,!1).ix(!1)},
@@ -45377,7 +45377,7 @@ A.alZ.prototype={
 $0(){return A.dF(this.a,!1).ix(!0)},
 $S:0}
 A.am3.prototype={
-$1(a){return A.ur(A.a([A.fd(B.el,new A.am0(a),null),A.fd(B.a4X,new A.am1(a),null),A.fd(B.a59,new A.am2(a),null)],t.D),B.a56,B.a52)},
+$1(a){return A.ur(A.a([A.fd(B.el,new A.am0(a),null),A.fd(B.a4W,new A.am1(a),null),A.fd(B.a59,new A.am2(a),null)],t.D),B.a56,B.a52)},
 $S:51}
 A.am0.prototype={
 $0(){return A.dF(this.a,!1).ix(-1)},
@@ -108561,22 +108561,22 @@ B.a_k=new A.l4(3,"hide")
 B.a91=new A.l4(4,"remove")
 B.AZ=new A.l4(5,"timeout")
 B.a_l=new A.x7(null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a4W=new A.bG("Data pulled successfully",null,null,null,null,null,null,null,null)
-B.B_=new A.fa(B.a4W,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
-B.a4Q=new A.bG("New passwords do not match",null,null,null,null,null,null,null,null)
-B.a_m=new A.fa(B.a4Q,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
-B.a4P=new A.bG("Failed to backup data",null,null,null,null,null,null,null,null)
-B.a_n=new A.fa(B.a4P,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
-B.a4I=new A.bG("Close App option is only supported for Win, Android and Linux platform.",null,null,null,null,null,null,null,null)
-B.a_o=new A.fa(B.a4I,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
-B.a4M=new A.bG("Deleted successfully",null,null,null,null,null,null,null,null)
-B.a_p=new A.fa(B.a4M,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
+B.a4V=new A.bG("Data pulled successfully",null,null,null,null,null,null,null,null)
+B.B_=new A.fa(B.a4V,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
+B.a4P=new A.bG("New passwords do not match",null,null,null,null,null,null,null,null)
+B.a_m=new A.fa(B.a4P,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
+B.a4O=new A.bG("Failed to backup data",null,null,null,null,null,null,null,null)
+B.a_n=new A.fa(B.a4O,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
+B.a4L=new A.bG("Deleted successfully",null,null,null,null,null,null,null,null)
+B.a_o=new A.fa(B.a4L,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
+B.a4X=new A.bG("Close App option is only supported for Windows, Android and Linux platform. Web users can just close the page.",null,null,null,null,null,null,null,null)
+B.a_p=new A.fa(B.a4X,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
 B.a4C=new A.bG("Invalid OTP QR code",null,null,null,null,null,null,null,null)
 B.a_q=new A.fa(B.a4C,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
 B.a53=new A.bG("Sign up successful. You can now log in.",null,null,null,null,null,null,null,null)
 B.a_r=new A.fa(B.a53,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
-B.a4K=new A.bG("Password changed successfully",null,null,null,null,null,null,null,null)
-B.a_s=new A.fa(B.a4K,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
+B.a4J=new A.bG("Password changed successfully",null,null,null,null,null,null,null,null)
+B.a_s=new A.fa(B.a4J,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
 B.a57=new A.bG("Data backed up successfully",null,null,null,null,null,null,null,null)
 B.a_t=new A.fa(B.a57,null,null,null,null,null,null,null,null,null,null,null,null,B.ao,null,null,null,B.w,null)
 B.a4y=new A.bG("URI copied to clipboard",null,null,null,null,null,null,null,null)
@@ -108956,17 +108956,17 @@ B.a4G=new A.bG("OTP List",null,null,null,null,null,null,null,null)
 B.a4H=new A.bG("Submit",null,null,null,null,null,null,null,null)
 B.Bn=new A.bG("Proceed",null,null,null,null,null,null,null,null)
 B.iu=new A.r(!0,B.kN,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a4J=new A.bG("Logout",null,B.iu,null,null,null,null,null,null)
-B.a4L=new A.bG("This will overwrite the data in local storage. Are you sure you want to proceed?",null,null,null,null,null,null,null,null)
-B.a4N=new A.bG("Are you sure you want to delete all data in cloud?",null,null,null,null,null,null,null,null)
+B.a4I=new A.bG("Logout",null,B.iu,null,null,null,null,null,null)
+B.a4K=new A.bG("This will overwrite the data in local storage. Are you sure you want to proceed?",null,null,null,null,null,null,null,null)
+B.a4M=new A.bG("Are you sure you want to delete all data in cloud?",null,null,null,null,null,null,null,null)
 B.a2w=new A.r(!0,null,null,null,null,null,18,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a4O=new A.bG("Data is stored locally, log in to enable cloud backup. \nFor web client, don't flush browser cache for this site, otherwise, you may loose data stored locally.",null,B.a2w,B.ip,null,null,null,null,null)
-B.a4R=new A.bG("Do you want to pull data from cloud to local? This will overwrite the data in local",null,null,null,null,null,null,null,null)
-B.a4S=new A.bG("Confirm Pull Data",null,null,null,null,null,null,null,null)
-B.a4T=new A.bG("Delete All Cloud data",null,B.iu,null,null,null,null,null,null)
-B.a4U=new A.bG("Yes",null,null,null,null,null,null,null,null)
-B.a4V=new A.bG("Save",null,null,null,null,null,null,null,null)
-B.a4X=new A.bG("Keep local data",null,null,null,null,null,null,null,null)
+B.a4N=new A.bG("Data is stored locally, log in to enable cloud backup. \nFor web client, don't flush browser cache for this site, otherwise, you may loose data stored locally.",null,B.a2w,B.ip,null,null,null,null,null)
+B.a4Q=new A.bG("Do you want to pull data from cloud to local? This will overwrite the data in local",null,null,null,null,null,null,null,null)
+B.a4R=new A.bG("Confirm Pull Data",null,null,null,null,null,null,null,null)
+B.a4S=new A.bG("Delete All Cloud data",null,B.iu,null,null,null,null,null,null)
+B.a4T=new A.bG("Yes",null,null,null,null,null,null,null,null)
+B.a4U=new A.bG("Save",null,null,null,null,null,null,null,null)
+B.a4W=new A.bG("Keep local data",null,null,null,null,null,null,null,null)
 B.a4Y=new A.bG("Data exist on cloud",null,null,null,null,null,null,null,null)
 B.a5_=new A.bG("This will overwrite the data in web storage. Are you sure you want to proceed?",null,null,null,null,null,null,null,null)
 B.a50=new A.bG("Manual Input",null,null,null,null,null,null,null,null)
