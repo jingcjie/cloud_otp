@@ -1,4 +1,5 @@
 import 'package:cloud_otp/utils/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'settings_page.dart';
@@ -52,8 +53,13 @@ class _MainPageState extends State<MainPage> {
           IconButton(
             icon: const Icon(Icons.exit_to_app_rounded),
             onPressed: () {
-              // logout(context);
-              exit(0);
+              if(!kIsWeb){
+                exit(0);
+              }else{
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Close App option is only supported for Win, Android and Linux platform.')),
+                );
+              }
             },
           ),
         ],
