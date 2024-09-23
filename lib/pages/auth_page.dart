@@ -36,6 +36,53 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
+
+  Future<void> _overrideLocal(BuildContext context) async {
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Data exist on cloud'),
+          content: const Text('Do you want to pull data from cloud to local? This will overwrite the data in local'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+            TextButton(
+              child: const Text('No'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      // Perform the pull data operation
+      try {
+        var response = await supabase
+            .from('user_data')
+            .select()
+            .maybeSingle();
+
+        if (response['user_data'] != null) {
+          var userData = response['user_data'];
+          otpUris = List.from(userData);
+          await prefs.setStringList("otpUris", otpUris);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Data pulled successfully')),
+          );
+        }
+      }catch (e){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -48,8 +95,9 @@ class _AuthPageState extends State<AuthPage> {
             email: _emailController.text,
             password: _passwordController.text,
           );
-          String id = response.user!.id;
+
           //  success sign in
+          String id = response.user!.id;
           isGuest = false;
           prefs.setBool("isGuest", isGuest);
           dynamic tResponse;
@@ -57,24 +105,25 @@ class _AuthPageState extends State<AuthPage> {
               .from('user_data')
               .select()
               .maybeSingle();
-          // no data
+          // no data at all
           if (tResponse==null){
             await supabase
                 .from('user_data')
                 .insert({ 'user_id': id,'user_data': [] });
-            otpUris= [];
-
           }else {
             if (tResponse['user_data'] == null) {
               await supabase
                   .from('user_data')
                   .update({'user_data': []})
                   .eq('user_id', id);
-              otpUris= [];
             } else {
-              otpUris = List.from(tResponse['user_data']);
+              List cloudOtpUris = List.from(tResponse['user_data']);
+              if (cloudOtpUris.isNotEmpty) {
+                await _overrideLocal(context);
+              }
             }
           }
+
           loginUsername = _emailController.text;
           loginPassword = _passwordController.text;
 

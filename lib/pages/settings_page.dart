@@ -17,11 +17,16 @@ class EmptySettingsPage extends StatelessWidget {
           Expanded(
             child: Center(
               child: isGuest
-                  ? const Text(
-                'Data is stored locally, log in to enable cloud backup. \nFor web client, don\'t flush browser cache for this site, otherwise, you may loose data stored.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
-              )
+                  ? kIsWeb?
+                const Text(
+                  'Data is stored locally, log in to enable cloud backup. \nFor web client, don\'t flush browser cache for this site, otherwise, you may loose data stored locally.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
+                ):const Text(
+                  'Data is stored locally, log in to enable cloud backup. ',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
+                )
                   : const Text('Settings content for logged-in users'),
             ),
           ),
@@ -238,10 +243,53 @@ class SettingsPage extends StatelessWidget {
             .from('user_data')
             .update({ 'user_data': [] })
             .eq('user_id', id);
-        logout(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error deleting data: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    final confirmed = await showDialog<int>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Log out'),
+        content: const Text('Do you want to delete all local data as well? Otherwise, you can still reach it using local mode!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(-1),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(0),
+            child: const Text('Keep local data'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(1),
+            child: const Text('Delete local data', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed !=-1) {
+      try {
+        await prefs.remove("loginUsername");
+        await prefs.remove("loginPassword");
+        supabase.auth.signOut();
+        if (confirmed == 1){
+          otpUris = [];
+          await prefs.remove("otpUris");
+          await prefs.setBool("isGuest", false);
+        }
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const AuthPage()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
         );
       }
     }
@@ -270,6 +318,11 @@ class SettingsPage extends StatelessWidget {
           leading: const Icon(Icons.delete_forever, color: Colors.red),
           title: const Text('Delete All Cloud data', style: TextStyle(color: Colors.red)),
           onTap: () => _deleteAccount(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.logout, color: Colors.red),
+          title: const Text('Logout', style: TextStyle(color: Colors.red)),
+          onTap: () => _logout(context),
         ),
       ],
     );
