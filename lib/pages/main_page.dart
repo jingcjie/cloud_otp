@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> {
                 exit(0);
               }else{
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Close App option is only supported for Win, Android and Linux platform.')),
+                  const SnackBar(content: Text('Close App option is only supported for Windows, Android and Linux platform. Web users can just close the page.')),
                 );
               }
             },
