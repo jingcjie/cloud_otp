@@ -154,7 +154,7 @@ class _ListViewPageState extends State<ListViewPage> {
     try {
       final currentTime = DateTime.now().millisecondsSinceEpoch;
       return OTP.generateTOTPCodeString(
-        item.secret,
+        item.secret.toUpperCase(),
         currentTime,
         length: item.length,
         interval: item.interval,

@@ -22,12 +22,47 @@ final SharedPreferencesAsync prefs = SharedPreferencesAsync();
 bool isGuest = false;
 
 
-bool isValidOtpUri(String uri) {
-  // Basic validation for OTP URI format
-  RegExp otpUriRegex = RegExp(r'^otpauth:\/\/(totp|hotp)\/(.+)\?secret=([A-Z2-7]+)(&.+)?$');
-  return otpUriRegex.hasMatch(uri);
-}
+// bool isValidOtpUri(String uri) {
+//   // Basic validation for OTP URI format
+//   RegExp otpUriRegex = RegExp(r'^otpauth:\/\/(totp|hotp)\/(.+)\?secret=([A-Z2-7]+)(&.+)?$');
+//   return otpUriRegex.hasMatch(uri);
+// }
+bool isValidOtpUri(String uriString) {
+  try {
+    final uri = Uri.parse(uriString);
 
+    // Check if the scheme is 'otpauth'
+    if (uri.scheme != 'otpauth') {
+      return false;
+    }
+
+    // Check if the host is either 'totp' or 'hotp'
+    if (uri.host != 'totp' && uri.host != 'hotp') {
+      return false;
+    }
+
+    // Extract and check the secret and issuer
+    final secret = uri.queryParameters['secret'] ?? '';
+    final issuer = uri.queryParameters['issuer'] ?? '';
+
+    // Check if secret is present and non-empty
+    if (secret.isEmpty) {
+      return false;
+    }
+
+    // Optional: You can add more specific checks here if needed
+    // For example, checking if the secret is valid base32:
+    // if (!RegExp(r'^[A-Z2-7]+$').hasMatch(secret)) {
+    //   return false;
+    // }
+
+    // If we've passed all checks, consider it valid
+    return true;
+  } catch (e) {
+    // If URI parsing fails, consider it invalid
+    return false;
+  }
+}
 // Future<void> logout(BuildContext context) async {
 //   await prefs.remove("loginUsername");
 //   await prefs.remove("loginPassword");
