@@ -225,7 +225,7 @@ class _ListViewPageState extends State<ListViewPage> {
       appBar: AppBar(
         title: const Text('OTP List'),
         elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).highlightColor,
       ),
       body: otpItems.isEmpty
           ? const Center(child: Text('No OTPs added yet. Tap the + button to add one.'))
