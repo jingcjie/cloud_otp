@@ -19,7 +19,7 @@ class OtpItem {
 
   factory OtpItem.fromUri(String uri) {
     final parsedUri = Uri.parse(uri);
-    final label = parsedUri.path.substring(1); // Remove leading '/'
+    final String label = Uri.decodeComponent(parsedUri.path.substring(1));
     final secret = parsedUri.queryParameters['secret'] ?? '';
     final issuer = parsedUri.queryParameters['issuer'] ?? '';
     final length = int.tryParse(parsedUri.queryParameters['digits'] ?? '6') ?? 6;

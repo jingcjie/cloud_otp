@@ -1,10 +1,10 @@
 import 'package:cloud_otp/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'main_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+  final VoidCallback onLoginCallback;
+  const AuthPage({super.key, required this.onLoginCallback});
 
   @override
   _AuthPageState createState() => _AuthPageState();
@@ -31,9 +31,10 @@ class _AuthPageState extends State<AuthPage> {
     // Implement guest mode logic here
     isGuest = true;
     prefs.setBool("isGuest", isGuest);
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const MainPage()),
-    );
+    // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(builder: (_) => const MainPage()),
+    // );
+    widget.onLoginCallback();
   }
 
 
@@ -131,9 +132,10 @@ class _AuthPageState extends State<AuthPage> {
           await prefs.setString("loginPassword", loginPassword);
           await prefs.setStringList("otpUris", otpUris);
 
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const MainPage()),
-          );
+          // Navigator.of(context).pushReplacement(
+          //   MaterialPageRoute(builder: (_) => const MainPage()),
+          // );
+          widget.onLoginCallback();
         }
         else {
           final response = await supabase.auth.signUp(
@@ -164,126 +166,6 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: Container(
-  //       decoration: BoxDecoration(
-  //         gradient: LinearGradient(
-  //           begin: Alignment.topLeft,
-  //           end: Alignment.bottomRight,
-  //           colors: [Colors.blue.shade300, Colors.purple.shade300],
-  //         ),
-  //       ),
-  //       child: SafeArea(
-  //         child: Center(
-  //           child: SingleChildScrollView(
-  //             child: Padding(
-  //               padding: const EdgeInsets.all(24.0),
-  //               child: Card(
-  //                 elevation: 8,
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(16),
-  //                 ),
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.all(24.0),
-  //                   child: Form(
-  //                     key: _formKey,
-  //                     child: Column(
-  //                       mainAxisSize: MainAxisSize.min,
-  //                       children: [
-  //                         Icon(
-  //                           Icons.lock,
-  //                           size: 80,
-  //                           color: Theme.of(context).primaryColor,
-  //                         ),
-  //                         const SizedBox(height: 24),
-  //                         Text(
-  //                           _isLogin ? 'Welcome Back' : 'Create Account',
-  //                           style: const TextStyle(
-  //                             fontSize: 24,
-  //                             fontWeight: FontWeight.bold,
-  //                           ),
-  //                         ),
-  //                         const SizedBox(height: 24),
-  //                         TextFormField(
-  //                           controller: _emailController,
-  //                           decoration: InputDecoration(
-  //                             labelText: 'Email',
-  //                             prefixIcon: const Icon(Icons.email),
-  //                             border: OutlineInputBorder(
-  //                               borderRadius: BorderRadius.circular(12),
-  //                             ),
-  //                           ),
-  //                           validator: (value) =>
-  //                           value!.isEmpty ? 'Please enter your email' : null,
-  //                           keyboardType: TextInputType.emailAddress,
-  //                           onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_passwordFocusNode),
-  //                         ),
-  //                         const SizedBox(height: 16),
-  //                         TextFormField(
-  //                           controller: _passwordController,
-  //                           focusNode: _passwordFocusNode,
-  //                           decoration: InputDecoration(
-  //                             labelText: 'Password',
-  //                             prefixIcon: const Icon(Icons.lock),
-  //                             suffixIcon: IconButton(
-  //                               icon: Icon(
-  //                                 _isObscure ? Icons.visibility : Icons.visibility_off,
-  //                               ),
-  //                               onPressed: () {
-  //                                 setState(() {
-  //                                   _isObscure = !_isObscure;
-  //                                 });
-  //                               },
-  //                             ),
-  //                             border: OutlineInputBorder(
-  //                               borderRadius: BorderRadius.circular(12),
-  //                             ),
-  //                           ),
-  //                           obscureText: _isObscure,
-  //                           validator: (value) =>
-  //                           value!.isEmpty ? 'Please enter your password' : null,
-  //                           onFieldSubmitted: (_) {
-  //                             if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-  //                               _submitForm();
-  //                             }
-  //                           },
-  //                         ),
-  //                         const SizedBox(height: 24),
-  //                         ElevatedButton(
-  //                           onPressed: _isLoading ? null : _submitForm,
-  //                           style: ElevatedButton.styleFrom(
-  //                             minimumSize: Size(double.infinity, 50),
-  //                             shape: RoundedRectangleBorder(
-  //                               borderRadius: BorderRadius.circular(12),
-  //                             ),
-  //                           ),
-  //                           child: _isLoading
-  //                               ? const CircularProgressIndicator()
-  //                               : Text(_isLogin ? 'Login' : 'Sign Up'),
-  //                         ),
-  //                         const SizedBox(height: 16),
-  //                         TextButton(
-  //                           onPressed: () => setState(() => _isLogin = !_isLogin),
-  //                           child: Text(
-  //                             _isLogin
-  //                                 ? 'Need an account? Sign Up'
-  //                                 : 'Already have an account? Login',
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -314,10 +196,10 @@ class _AuthPageState extends State<AuthPage> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.lock,
                                   size: 80,
-                                  color: Theme.of(context).primaryColor,
+                                  color: Colors.green,
                                 ),
                                 const SizedBox(height: 24),
                                 Text(

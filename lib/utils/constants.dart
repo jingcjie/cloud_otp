@@ -63,13 +63,4 @@ bool isValidOtpUri(String uriString) {
     return false;
   }
 }
-// Future<void> logout(BuildContext context) async {
-//   await prefs.remove("loginUsername");
-//   await prefs.remove("loginPassword");
-//   supabase.auth.signOut();
-//   Navigator.of(context).pushReplacement(
-//     MaterialPageRoute(builder: (_) => const AuthPage()),
-//   );
-//
-// }
 
