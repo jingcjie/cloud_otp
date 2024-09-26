@@ -1,7 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_otp/pages/auth_page.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 // System env
@@ -43,7 +41,6 @@ bool isValidOtpUri(String uriString) {
 
     // Extract and check the secret and issuer
     final secret = uri.queryParameters['secret'] ?? '';
-    final issuer = uri.queryParameters['issuer'] ?? '';
 
     // Check if secret is present and non-empty
     if (secret.isEmpty) {
