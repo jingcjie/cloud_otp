@@ -2,11 +2,13 @@ import 'package:cloud_otp/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:cloud_otp/pages/auth_page.dart';
-
+import 'package:provider/provider.dart';
+import 'package:cloud_otp/models/theme_provider.dart';
 
 class EmptySettingsPage extends StatelessWidget {
-  const EmptySettingsPage({Key? key}) : super(key: key);
+
+  final VoidCallback onLogoutCallback;
+  const EmptySettingsPage({super.key, required this.onLogoutCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,10 @@ class EmptySettingsPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const AuthPage()),
-                  );
+                  // Navigator.of(context).pushReplacement(
+                  //   MaterialPageRoute(builder: (_) => const AuthPage()),
+                  // );
+                  onLogoutCallback();
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -69,8 +72,9 @@ class EmptySettingsPage extends StatelessWidget {
 class SettingsPage extends StatelessWidget {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final VoidCallback onLogoutCallback;
+  SettingsPage({super.key, required this.onLogoutCallback});
 
-  SettingsPage({super.key});
 
   Future<void> _changePassword(BuildContext context) async {
     showDialog(
@@ -80,11 +84,6 @@ class SettingsPage extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // TextField(
-            //   controller: _oldPasswordController,
-            //   obscureText: true,
-            //   decoration: const InputDecoration(labelText: 'Old Password'),
-            // ),
             TextField(
               controller: _newPasswordController,
               obscureText: true,
@@ -107,7 +106,7 @@ class SettingsPage extends StatelessWidget {
               try{
                 if (_newPasswordController.text != _confirmPasswordController.text) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('New passwords do not match')),
+                    const SnackBar(content: Text('Passwords do not match')),
                   );
                   return;
                 }
@@ -284,9 +283,8 @@ class SettingsPage extends StatelessWidget {
           await prefs.remove("otpUris");
           await prefs.setBool("isGuest", false);
         }
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const AuthPage()),
-        );
+
+        onLogoutCallback();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: ${e.toString()}')),
@@ -297,34 +295,119 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ListTile(
-          leading: const Icon(Icons.lock),
-          title: const Text('Change Password'),
-          onTap: () => _changePassword(context),
-        ),
-        ListTile(
-          leading: const Icon(Icons.cloud_download),
-          title: const Text('Pull Data'),
-          onTap: () => _pullData(context),
-        ),
-        ListTile(
-          leading: const Icon(Icons.backup),
-          title: const Text('Backup Data'),
-          onTap: () => _backupData(context),
-        ),
-        ListTile(
-          leading: const Icon(Icons.delete_forever, color: Colors.red),
-          title: const Text('Delete All Cloud data', style: TextStyle(color: Colors.red)),
-          onTap: () => _deleteAccount(context),
-        ),
-        ListTile(
-          leading: const Icon(Icons.logout, color: Colors.red),
-          title: const Text('Logout', style: TextStyle(color: Colors.red)),
-          onTap: () => _logout(context),
-        ),
-      ],
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return ListView(
+          children: [
+            _buildTopBanner(context),
+            ListTile(
+              leading: const Icon(Icons.lock),
+              title: const Text('Change Password'),
+              onTap: () => _changePassword(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.cloud_download),
+              title: const Text('Pull Data'),
+              onTap: () => _pullData(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.backup),
+              title: const Text('Backup Data'),
+              onTap: () => _backupData(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.brightness_medium),
+              title: const Text('Theme Mode'),
+              trailing: DropdownButton<ThemeMode>(
+                value: themeProvider.themeMode,
+                onChanged: (ThemeMode? newValue) {
+                  if (newValue != null) {
+                    themeProvider.setThemeMode(newValue);
+                  }
+                },
+                items: const [
+                  DropdownMenuItem(
+                    value: ThemeMode.system,
+                    child: Text('System'),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.light,
+                    child: Text('Light'),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text('Dark'),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_forever, color: Colors.red),
+              title: const Text('Delete All Cloud data', style: TextStyle(color: Colors.red)),
+              onTap: () => _deleteAccount(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text('Logout', style: TextStyle(color: Colors.red)),
+              onTap: () => _logout(context),
+            ),
+          ],
+        );
+      },
     );
   }
+
+  Widget _buildTopBanner(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).primaryColorLight,
+            Theme.of(context).primaryColorDark.withOpacity(0.6),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Icon(
+              Icons.account_circle,
+              size: 80,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome,',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  loginUsername, // Replace with actual username
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }

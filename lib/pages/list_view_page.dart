@@ -154,7 +154,7 @@ class _ListViewPageState extends State<ListViewPage> {
     try {
       final currentTime = DateTime.now().millisecondsSinceEpoch;
       return OTP.generateTOTPCodeString(
-        item.secret,
+        item.secret.toUpperCase(),
         currentTime,
         length: item.length,
         interval: item.interval,
@@ -225,7 +225,7 @@ class _ListViewPageState extends State<ListViewPage> {
       appBar: AppBar(
         title: const Text('OTP List'),
         elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).highlightColor,
       ),
       body: otpItems.isEmpty
           ? const Center(child: Text('No OTPs added yet. Tap the + button to add one.'))
@@ -302,7 +302,7 @@ class _ListViewPageState extends State<ListViewPage> {
       floatingActionButton: SpeedDial(
         icon: Icons.add,
         activeIcon: Icons.close,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         children: [
           SpeedDialChild(
             child: const Icon(Icons.input),
