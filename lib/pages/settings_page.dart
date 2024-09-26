@@ -84,11 +84,6 @@ class SettingsPage extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // TextField(
-            //   controller: _oldPasswordController,
-            //   obscureText: true,
-            //   decoration: const InputDecoration(labelText: 'Old Password'),
-            // ),
             TextField(
               controller: _newPasswordController,
               obscureText: true,
@@ -111,7 +106,7 @@ class SettingsPage extends StatelessWidget {
               try{
                 if (_newPasswordController.text != _confirmPasswordController.text) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('New passwords do not match')),
+                    const SnackBar(content: Text('Passwords do not match')),
                   );
                   return;
                 }
@@ -304,6 +299,7 @@ class SettingsPage extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return ListView(
           children: [
+            _buildTopBanner(context),
             ListTile(
               leading: const Icon(Icons.lock),
               title: const Text('Change Password'),
@@ -360,4 +356,58 @@ class SettingsPage extends StatelessWidget {
       },
     );
   }
+
+  Widget _buildTopBanner(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).primaryColorLight,
+            Theme.of(context).primaryColorDark.withOpacity(0.6),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Icon(
+              Icons.account_circle,
+              size: 80,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome,',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  loginUsername, // Replace with actual username
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }

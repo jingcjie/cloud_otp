@@ -38,7 +38,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
 
-  Future<void> _overrideLocal(BuildContext context) async {
+  Future<void> _overrideLocal(BuildContext context, List cloudOtpUris) async {
     final bool? confirm = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -63,19 +63,13 @@ class _AuthPageState extends State<AuthPage> {
     if (confirm == true) {
       // Perform the pull data operation
       try {
-        var response = await supabase
-            .from('user_data')
-            .select()
-            .maybeSingle();
 
-        if (response['user_data'] != null) {
-          var userData = response['user_data'];
-          otpUris = List.from(userData);
-          await prefs.setStringList("otpUris", otpUris);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Data pulled successfully')),
-          );
-        }
+        var userData = cloudOtpUris;
+        otpUris = List.from(userData);
+        await prefs.setStringList("otpUris", otpUris);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data pulled successfully')),
+        );
       }catch (e){
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
@@ -120,7 +114,15 @@ class _AuthPageState extends State<AuthPage> {
             } else {
               List cloudOtpUris = List.from(tResponse['user_data']);
               if (cloudOtpUris.isNotEmpty) {
-                await _overrideLocal(context);
+                if (otpUris.isEmpty){
+                  otpUris = List.from(cloudOtpUris);
+                  await prefs.setStringList("otpUris", otpUris);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Data pulled successfully')),
+                  );
+                }else{
+                  await _overrideLocal(context, cloudOtpUris);
+                }
               }
             }
           }
