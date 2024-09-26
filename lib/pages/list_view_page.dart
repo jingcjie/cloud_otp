@@ -222,10 +222,11 @@ class _ListViewPageState extends State<ListViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('OTP List'),
-        elevation: 0,
-        backgroundColor: Theme.of(context).highlightColor,
+      appBar: const GradientAppBar(
+        title: 'OTP List',
+        actions: [
+          // Add any action buttons here if needed
+        ],
       ),
       body: otpItems.isEmpty
           ? const Center(child: Text('No OTPs added yet. Tap the + button to add one.'))
@@ -492,3 +493,38 @@ class _ListViewPageState extends State<ListViewPage> {
 
 }
 
+class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final List<Widget>? actions;
+
+  const GradientAppBar({
+    Key? key,
+    required this.title,
+    this.actions,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.blue.shade800.withOpacity(0.9),
+            Colors.green.shade700.withOpacity(0.9),
+          ],
+        ),
+      ),
+      child: AppBar(
+        title: Text(title),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: actions,
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
