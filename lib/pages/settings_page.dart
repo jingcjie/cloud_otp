@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_otp/models/theme_provider.dart';
+import 'package:cloud_otp/models/snackbar.dart';
 
 class EmptySettingsPage extends StatelessWidget {
 
@@ -102,21 +103,26 @@ class SettingsPage extends StatelessWidget {
             onPressed: () async {
               try{
                 if (_newPasswordController.text != _confirmPasswordController.text) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Passwords do not match')),
-                  );
+                  context.showBeautifulSnackBar(message: 'Passwords do not match.', isError: true);
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Passwords do not match')),
+                  // );
                   return;
                 }
                 await supabase.auth.updateUser(UserAttributes(
                     password: _newPasswordController.text
                 ));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Password changed successfully')),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(content: Text('Password changed successfully')),
+                // );
+
+                context.showBeautifulSnackBar(message: 'Password changed successfully', isError: false);
+
               }catch(e){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Unexpected error: ${e.toString()}')),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(content: Text('Unexpected error: ${e.toString()}')),
+                // );
+                context.showBeautifulSnackBar(message: 'Unexpected error: ${e.toString()}', isError: true);
               }
             },
             child: const Text('Submit'),
@@ -160,14 +166,16 @@ class SettingsPage extends StatelessWidget {
           // Use the userData as needed
           otpUris = List.from(userData);
           await prefs.setStringList("otpUris", otpUris);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Data pulled successfully')),
-          );
+          context.showBeautifulSnackBar(message: 'Data pulled successfully');
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(content: Text('Data pulled successfully')),
+          // );
         }
       }catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
-        );
+        context.showBeautifulSnackBar(message: 'Data pulled successfully', isError: true);
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
+        // );
       }
     }
   }
@@ -202,13 +210,15 @@ class SettingsPage extends StatelessWidget {
             .from('user_data')
             .update({ 'user_data': userData })
             .eq('user_id', id);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data backed up successfully')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Text('Data backed up successfully')),
+        // );
+        context.showBeautifulSnackBar(message: 'Data backed up successfully', isError: false);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to backup data')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Text('Failed to backup data')),
+        // );
+        context.showBeautifulSnackBar(message: 'Failed to backup data.', isError: true);
       }
     }
   }
@@ -239,10 +249,12 @@ class SettingsPage extends StatelessWidget {
             .from('user_data')
             .update({ 'user_data': [] })
             .eq('user_id', id);
+        context.showBeautifulSnackBar(message: 'All data in cloud is deleted.', isError: false);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting data: ${e.toString()}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Error deleting data: ${e.toString()}')),
+        // );
+        context.showBeautifulSnackBar(message: 'Failed to delete data in cloud.', isError: true);
       }
     }
   }
@@ -283,9 +295,10 @@ class SettingsPage extends StatelessWidget {
 
         onLogoutCallback();
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Error: ${e.toString()}')),
+        // );
+        context.showBeautifulSnackBar(message: 'Error: ${e.toString()}', isError: true);
       }
     }
   }

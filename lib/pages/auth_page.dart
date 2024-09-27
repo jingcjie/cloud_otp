@@ -1,6 +1,7 @@
 import 'package:cloud_otp/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:cloud_otp/models/snackbar.dart';
 
 class AuthPage extends StatefulWidget {
   final VoidCallback onLoginCallback;
@@ -63,17 +64,16 @@ class _AuthPageState extends State<AuthPage> {
     if (confirm == true) {
       // Perform the pull data operation
       try {
-
         var userData = cloudOtpUris;
         otpUris = List.from(userData);
         await prefs.setStringList("otpUris", otpUris);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data pulled successfully')),
-        );
+        context.showBeautifulSnackBar(message: 'Data pulled successfully');
+
       }catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}')),
+        // );
+        context.showBeautifulSnackBar(message: 'Failed to pull data, maybe there is no data in cloud. Error: ${e.toString()}', isError: true);
       }
     }
   }
@@ -117,9 +117,11 @@ class _AuthPageState extends State<AuthPage> {
                 if (otpUris.isEmpty){
                   otpUris = List.from(cloudOtpUris);
                   await prefs.setStringList("otpUris", otpUris);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Data pulled successfully')),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Data pulled successfully')),
+                  // );
+
+                  context.showBeautifulSnackBar(message: 'Data pulled successfully');
                 }else{
                   await _overrideLocal(context, cloudOtpUris);
                 }
@@ -146,20 +148,23 @@ class _AuthPageState extends State<AuthPage> {
           );
 
           if (response.user != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Sign up successful. You can now log in.')),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   const SnackBar(content: Text('Sign up successful. You can now log in.')),
+            // );
+            context.showBeautifulSnackBar(message: 'Sign up successful. You can now log in.');
             setState(() => _isLogin = true);
           }
         }
       } on AuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.message}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Error: ${e.message}')),
+        // );
+        context.showBeautifulSnackBar(message: 'Error: ${e.toString()}', isError: true);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Unexpected error: ${e.toString()}')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Unexpected error: ${e.toString()}')),
+        // );
+        context.showBeautifulSnackBar(message: 'Error: ${e.toString()}', isError: true);
       } finally {
         setState(() {
           _isLoading = false;

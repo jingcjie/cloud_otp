@@ -12,6 +12,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:zxing2/qrcode.dart';
 import 'package:image/image.dart' as img;
 import 'package:cloud_otp/widgets/qr_code_dialog.dart';
+import 'package:cloud_otp/models/snackbar.dart';
 
 class ListViewPage extends StatefulWidget {
   ListViewPage({super.key});
@@ -142,10 +143,11 @@ class _ListViewPageState extends State<ListViewPage> {
         currentOtps[newIndex] = _generateOtp(newOtpItem);
         _resetAndStartTimer(newIndex);
       } catch (e) {
-        print('Error adding OTP: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add OTP: $e')),
-        );
+        // print('Error adding OTP: $e');
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(content: Text('Failed to add OTP: $e')),
+        // );
+        context.showBeautifulSnackBar(message: 'Failed to add OTP: $e', isError: true);
       }
     });
   }
@@ -173,9 +175,11 @@ class _ListViewPageState extends State<ListViewPage> {
     if (index < 0 || index >= currentOtps.length) return;
 
     Clipboard.setData(ClipboardData(text: currentOtps[index]));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('OTP copied to clipboard')),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(content: Text('OTP copied to clipboard')),
+    // );
+
+    context.showBeautifulSnackBar(message: 'OTP copied to clipboard.', isError: false);
   }
 
 
@@ -208,14 +212,19 @@ class _ListViewPageState extends State<ListViewPage> {
       // Update the stored URIs in SharedPreferences
       prefs.setStringList('otpUris', otpUris);
       // Show a success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Deleted successfully')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Deleted successfully')),
+      // );
+
+      context.showBeautifulSnackBar(message: 'Deleted successfully.', isError: false);
+
     } catch (e) {
-      print('Error deleting OTP: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete OTP: $e')),
-      );
+      // print('Error deleting OTP: $e');
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Failed to delete OTP: $e')),
+      // );
+      context.showBeautifulSnackBar(message: 'Failed to delete OTP: $e', isError: true);
+
     }
   }
 
@@ -401,9 +410,10 @@ class _ListViewPageState extends State<ListViewPage> {
       if (isValidOtpUri(scannedData)) {
         _addOtp(scannedData);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid OTP QR code')),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Text('Invalid OTP QR code')),
+        // );
+        context.showBeautifulSnackBar(message: 'Invalid OTP QR code', isError: true);
       }
     }
   }
