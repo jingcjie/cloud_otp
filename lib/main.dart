@@ -32,6 +32,8 @@ Future<void> main() async {
         );
         if (response.user != null) {
           needToLogin = false;
+          loginUsername = savedLoginusername;
+          loginPassword = savedLoginPassword;
         }
       }
     }else{
@@ -96,6 +98,8 @@ class MyWindowListener extends WindowListener {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -115,7 +119,7 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
             themeMode: themeProvider.themeMode,
-            home: const AppShell(),
+            home: AppShell(initPageNum:needToLogin?0:1),
           );
         },
       ),
@@ -198,14 +202,21 @@ class MyApp extends StatelessWidget {
 // }
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  final int initPageNum;
+  const AppShell({super.key, required this.initPageNum});
+
 
   @override
   State<AppShell> createState() => _AppShellState();
 }
 
 class _AppShellState extends State<AppShell> {
-  int pageNum = 0;
+  late int pageNum;
+  @override
+  void initState() {
+    super.initState();
+    pageNum = widget.initPageNum;
+  }
 
   @override
   Widget build(BuildContext context) {

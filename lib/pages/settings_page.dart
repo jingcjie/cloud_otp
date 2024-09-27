@@ -38,9 +38,6 @@ class EmptySettingsPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(builder: (_) => const AuthPage()),
-                  // );
                   onLogoutCallback();
                 },
                 style: ElevatedButton.styleFrom(
