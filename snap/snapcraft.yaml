@@ -5,7 +5,7 @@ description: A versatile Open-Source One-Time Password (OTP) authenticator appli
 
 grade: stable
 confinement: strict
-base: core20
+base: core22
 
 parts:
   cloud-otp:
