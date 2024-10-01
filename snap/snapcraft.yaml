@@ -8,16 +8,10 @@ confinement: strict
 base: core20
 
 parts:
-  flutter-app:
-    plugin: nil
+  cloud-otp:
     source: .
-    override-build: |
-      flutter config --enable-linux-desktop
-      flutter build linux --release
-      
-      # Copy build artifacts
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp -r build/linux/x64/release/bundle/* $SNAPCRAFT_PART_INSTALL/bin/
+    plugin: flutter
+    flutter-target: lib/main.dart # The main entry-point file of the application
 
 apps:
   CloudOTP:
