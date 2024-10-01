@@ -1,0 +1,25 @@
+name: CloudOTP
+version: '1.4.0'
+summary: Cloud OTP
+description: A versatile Open-Source One-Time Password (OTP) authenticator application built with Dart, supporting multiple platforms including Windows, Linux, Web, Android, iOS, and macOS.
+
+grade: stable
+confinement: strict
+base: core20
+
+parts:
+  flutter-app:
+    plugin: flutter
+    source: .
+    flutter-target: lib/main.dart
+
+apps:
+  CloudOTP:
+    command: CloudOTP
+    extensions: [gnome]
+    plugs:
+      - network
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
