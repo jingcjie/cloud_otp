@@ -16,7 +16,6 @@ parts:
 apps:
   CloudOTP:
     command: cloud-otp
-    extensions: [gnome]
     plugs:
       - network
       - desktop
