@@ -9,9 +9,15 @@ base: core20
 
 parts:
   flutter-app:
-    plugin: flutter
+    plugin: nil
     source: .
-    flutter-target: lib/main.dart
+    override-build: |
+      flutter config --enable-linux-desktop
+      flutter build linux --release
+      
+      # Copy build artifacts
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -r build/linux/x64/release/bundle/* $SNAPCRAFT_PART_INSTALL/bin/
 
 apps:
   CloudOTP:
