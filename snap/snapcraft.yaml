@@ -17,7 +17,7 @@ parts:
 
 apps:
   CloudOTP:
-    command: bin/cloud-otp
+    command: build/linux/x64/release/bundle/cloud_otp
     plugs:
       - network
       - desktop
