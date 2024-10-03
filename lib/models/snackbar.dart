@@ -36,7 +36,7 @@ class BeautifulSnackBarContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      height: 50,
+      // height: 50,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isError

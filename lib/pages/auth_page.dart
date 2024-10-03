@@ -156,14 +156,8 @@ class _AuthPageState extends State<AuthPage> {
           }
         }
       } on AuthException catch (e) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(content: Text('Error: ${e.message}')),
-        // );
         context.showBeautifulSnackBar(message: 'Error: ${e.toString()}', isError: true);
       } catch (e) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(content: Text('Unexpected error: ${e.toString()}')),
-        // );
         context.showBeautifulSnackBar(message: 'Error: ${e.toString()}', isError: true);
       } finally {
         setState(() {
